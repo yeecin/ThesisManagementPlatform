@@ -90,4 +90,9 @@ public class DemoController {
     public String getUsername(HttpSession session) {
         return (String) session.getAttribute("username");
     }
+    @RequestMapping("/User/Register")
+    public String register() {
+        return "/User/Register";
+    }
+
 }
