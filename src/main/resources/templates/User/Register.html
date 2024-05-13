@@ -2,9 +2,92 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>大学生毕业论文（设计）管理系统 - 注册</title>
+    <link rel="stylesheet" href="/css/login/loginNew.css">
 </head>
 <body>
+<!-- Main Register Box -->
+<div class="registerbox" id="register_main">
+    <div class="register_form">
+            <div class="form_tabs">
+                <span class="act">用户注册</span>
+            </div>
+            <div class="form_tabbox" style="display:block;">
+                <div class="form_line">
+                    <i class="name"></i>
+                    <input type="text" id="studentId" class="inp_name form_inp" placeholder="请输入学号" autofocus="" maxlength="30">
+                </div>
+                <div class="form_line">
+                    <i class="name"></i>
+                    <input type="text" id="studentName" class="inp_name form_inp" placeholder="请输入姓名" maxlength="30">
+                </div>
+                <div class="form_line">
+                    <i class="name"></i>
+                    <input type="text" id="major" class="inp_name form_inp" placeholder="请输入专业" maxlength="30">
+                </div>
+                <div class="form_line">
+                    <i class="name"></i>
+                    <input type="text" id="grade" class="inp_name form_inp" placeholder="请输入年级" maxlength="30">
+                </div>
+                <div class="form_line">
+                    <i class="email"></i>
+                    <input type="email" id="email" class="inp_email form_inp" placeholder="请输入邮箱" maxlength="30">
+                </div>
+                <div class="form_line">
+                    <i class="phone"></i>
+                    <input type="tel" id="phone" class="inp_phone form_inp" placeholder="请输入电话" maxlength="30">
+                </div>
+                <div class="form_line">
+                    <i class="pwd"></i>
+                    <input id="password" class="inp_pwd form_inp" type="password" placeholder="输入密码" maxlength="30">
+                </div>
+                <div class="form_btn">
+                    <a href="JavaScript:" id="registerBtn" data-type="0" data-img="0">注&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;册</a>
+                </div>
+                <div class="form_code">
+                    <p class="form_email"><i></i>xiaoyii@cnki.net</p>
+                </div>
+            </div>
+    </div>
+    <!-- Footer -->
+    <div class="login_footer">
+        <div class="footer_text">
+            <p>虚拟ICP证123456号  虚拟网络出版服务许可证（总）网出证（虚拟）字第123号   虚拟经营性网站备案信息 虚拟公网安备 1234567890号</p>
+            <p>© 2023-2030 虚拟公司《虚拟产品》虚拟出版社有限公司</p>
+        </div>
+    </div>
+</div>
+<!-- Scripts -->
+<script src="/js/vue.global.js"></script>
+<script src="/js/axios.min.js"></script>
+<script>
+    // Register Button Click Event
+    var registerBtn = document.getElementById('registerBtn');
+    registerBtn.onclick = function () {
+        var studentId = document.getElementById('studentId').value;
+        var studentName = document.getElementById('studentName').value;
+        var major = document.getElementById('major').value;
+        var grade = document.getElementById('grade').value;
+        var email = document.getElementById('email').value;
+        var phone = document.getElementById('phone').value;
+        var password = document.getElementById('password').value;
+        axios.post(
+            "/User/Register",
+            {
+                studentId: studentId,
+                studentName: studentName,
+                major: major,
+                grade: grade,
+                email: email,
+                phone: phone,
+                password: password
+            }
+        ).then(response => {
+            alert(response.data);
+            console.log(response.data);
+        });
 
+    }
+</script>
 </body>
 </html>

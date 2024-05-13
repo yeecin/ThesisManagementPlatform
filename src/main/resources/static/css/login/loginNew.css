@@ -163,6 +163,30 @@ s, i {
     position: relative;
 }
 
+
+.registerbox {
+    /*background: url("/images/login_bg.jpg") no-repeat 0 0;*/
+    background-size: cover;
+    padding: 20px 0 !important;
+    max-width: 300px;
+    position: relative;
+    /*display: flex;*/
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+    width: 50%; /* 设置宽度为屏幕宽度的 50% */
+    margin: auto; /* 居中显示 */
+}
+.register_form {
+    width: 35%;
+    min-height: 0;
+    box-shadow: 0 0 30px 10px rgb(55 64 79 / 5%);
+    border: 2px solid rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(18px);
+    border-radius: 40px;
+    position: relative;
+}
 .login_left {
     margin-left: 5%;
     width: 55%;
@@ -198,12 +222,11 @@ s, i {
 
 .login_title {
     /*display: block;*/
-    font-family: 'MyFont1';
+    /*font-family: 'MyFont1';*/
     height: 100px;
     vertical-align: middle;
     color: #333;
     font-size: 62px; /* fallback */
-    font-size: clamp(40px, 58px, 62px);
     z-index: 2;
     background-color: rgba(0, 0, 0, 0);
     position: relative;
@@ -256,7 +279,7 @@ s, i {
     width: 100%;
     margin-bottom: 30px;
     display: inline-block;
-    font-family: 'MyFont1';
+    /*font-family: 'MyFont1';*/
     font-size: 60px;
     line-height: 1em;
     color: var(--tableLinkColor);
@@ -446,10 +469,11 @@ s, i {
         color: #666;
     }
 
+
 .login_form {
     width: 35%;
     min-height: 750px;
-    box-shadow: 0px 0px 30px 10px rgb(55 64 79 / 5%);
+    box-shadow: 0 0 30px 10px rgb(55 64 79 / 5%);
     border: 2px solid rgba(255,255,255,0.5);
     background: rgba(255,255,255,0.3);
     backdrop-filter: blur(18px);
@@ -469,9 +493,7 @@ s, i {
 .tabs_type, .form_tabs {
     display: flex;
 }
-.active {
-    color: red;  // 将文字颜色改为红色
-}
+
     .form_tabs span {
         font-size: 18px;
         flex: 1;
