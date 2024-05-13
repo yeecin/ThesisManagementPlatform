@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>大学生毕业论文（设计）管理系统</title>
+    <title>大学生毕业论文（设计）管理系统</title>
+    <!--<link rel="stylesheet" href="Themes/default/root_764A423E497E0D6C4D2E05CD137DC084.css" />-->
+    <link rel="stylesheet" href="/css/login/loginNew.css">
+</head>
+<body>
+<div class="loginbox" id="login_main">
+    <div class="login_left">
+        <div class="logobox clearfix">
+            <img id="school_logo" src="" alt="" height="100" style="display: none;">
+            <span id="school_name" class="login_title disNone" style="display: none;"></span>
+        </div>
+        <div class="login_name" id="xtmc">大学生毕业论文（设计）管理系统</div>
+        <div class="login_items">
+            <div class="itemlist notice" id="noticesBox">
+                <div class="item_name clearfix">
+                    <h2>通知公告</h2>
+                    <div class="item_tabs"><span data-id="2838" class="cur" style="left: 0px;">通告类型</span></div>
+                    <div class="item_more"><a href="JavaScript:;">more&gt;&gt;</a></div>
+                </div>
+                <div class="item_ul_box clearfix">
+                    <ul class="item_ul" id="item_ul_2838" style="display: block;">
+                        <li class="item_li">
+                            <a href="Notice.html?dp=bwu&amp;r=1715494730550&amp;noticeId=52&amp;typeId=2838" title="毕业实习文档" target="_blank">毕业实习文档</a>
+                            <span>2023-12-26</span>
+                        </li>
+                        <li class="item_li">
+                            <a href="Notice.html?dp=bwu&amp;r=1715494730550&amp;noticeId=51&amp;typeId=2838" title="毕业论文管理文件" target="_blank">毕业论文管理文件</a>
+                            <span>2023-12-26</span>
+                        </li>
+                        <li class="item_li">
+                            <a href="Notice.html?dp=bwu&amp;r=1715494730550&amp;noticeId=49&amp;typeId=2838" title="外文论文格式规范及模板" target="_blank">外文论文格式规范及模板</a>
+                            <span>2023-10-16</span>
+                        </li>
+                        <li class="item_li">
+                            <a href="Notice.html?dp=bwu&amp;r=1715494730550&amp;noticeId=47&amp;typeId=2838" title="学院选题自查文档（以此版为准）" target="_blank">学院选题自查文档（以此版为准）</a>
+                            <span>2023-10-16</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="itemlist disNone" id="thesisList">
+                <div class="item_name clearfix">
+                    <h2>优秀论文展示</h2>
+                    <div class="item_more" data-type="-1"><a href="JavaScript:;">more&gt;&gt;</a></div>
+                </div>
+                <ul class="item_ul" style="display:block;"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="login_form">
+        <div class="form_con">
+            <div class="form_tabs">
+                <span class="act">账号密码登录</span>
+            </div>
+            <div class="form_tabbox" style="display:block;">
+                <div class="tabs_type" id="rolebox">
+                    <span data-id="1">管理员</span>
+                    <span data-id="2">教师</span>
+                    <span data-id="3">学生</span>
+                </div>
+                <div class="form_line">
+                    <i class="name"></i>
+                    <input type="text" id="username" class="inp_name form_inp" placeholder="请输入用户名" autofocus="" maxlength="30">
+                </div>
+                <div class="form_line">
+                    <i class="pwd"></i>
+                    <input id="password" class="inp_pwd form_inp" type="password" placeholder="输入密码" maxlength="30">
+                </div>
+                <div class="form_line">
+                    <input type="checkbox" id="agreement">
+                    <label for="agreement">
+                        <span>我已阅读<a target="_blank" href="./User/privacy">《隐私政策》</a>和<a target="_blank" href="./User/agreement">《使用协议》</a></span>
+                    </label>
+                </div>
+                <div class="form_register">
+                    <a href="./User/Register">注册新账号</a>
+                </div>
+                <div class="form_btn">
+                    <a href="JavaScript:" id="loginBtn" data-type="0" data-img="0">登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</a>
+                </div>
+                <div class="forget_pwd">
+                    <a href="./User/ResetPasswords" id="resPwd">*忘记密码？</a>
+                </div>
+                <div class="form_code">
+                    <p class="form_email"><i></i>xiaoyii@cnki.net</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="login_footer">
+<!--        <div class="zwlogo"><img src="./Themes/login/images20231030/zwlogo.png" alt=""></div>-->
+        <div class="footer_text">
+            <p>虚拟ICP证123456号  虚拟网络出版服务许可证（总）网出证（虚拟）字第123号   虚拟经营性网站备案信息 虚拟公网安备 1234567890号</p>
+            <p>© 2023-2030 虚拟公司《虚拟产品》虚拟出版社有限公司</p>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/js/vue.global.js"></script>
+<script src="/js/axios.min.js"></script>
+<script>
+    //设置默认选中学生
+    window.onload = function() {
+        var studentSpan = document.querySelector('.tabs_type span[data-id="3"]');
+        studentSpan.classList.add('typeact');
+    }
+    //设置点击用户类型的时候改变点击的那个的颜色
+    var role = document.querySelectorAll('.tabs_type span');
+    role.forEach(function(span) {
+        span.addEventListener('click', function() {
+            role.forEach(function(otherSpan) {
+                otherSpan.classList.remove('typeact');
+            });
+            this.classList.add('typeact');
+        });
+    });
+    //点击登录时，判断用户类型，发送请求
+    var loginBtn = document.getElementById('loginBtn');
+    loginBtn.onclick = function () {
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+        var agreement = document.getElementById('agreement').checked;
+        var selectedRoleElement = document.querySelector('.tabs_type span.typeact');
+        var selectedRoleId = selectedRoleElement.getAttribute('data-id');
+        if (username == '' || password == '') {
+            alert('用户名或密码不能为空');
+            return;
+        }
+        if (!agreement) {
+            alert('请阅读隐私政策和使用协议');
+            return;
+        }
+        axios.post('/loginCheck', {
+            username: username,
+            password: password,
+            role: selectedRoleId
+        }).then(function (response) {
+            window.location.href = response.headers.location;
+            console.log(response);
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
+</script>
+
+</html>
