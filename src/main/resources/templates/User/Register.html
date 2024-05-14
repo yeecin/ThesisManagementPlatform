@@ -72,7 +72,7 @@
         var phone = document.getElementById('phone').value;
         var password = document.getElementById('password').value;
         axios.post(
-            "/User/Register",
+            "/User/RegisterCheck",
             {
                 studentId: studentId,
                 studentName: studentName,
@@ -84,9 +84,11 @@
             }
         ).then(response => {
             alert(response.data);
+            window.location.href = response.headers.location;
             console.log(response.data);
+        }).catch(function (error) {
+            console.log(error);
         });
-
     }
 </script>
 </body>

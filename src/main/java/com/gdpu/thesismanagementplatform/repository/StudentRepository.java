@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface StudentRepository extends JpaRepository<Student, String> {
     Student findByStudentNameAndPassword(String studentName, String password);
     Student findByStudentName(String studentName);
+
+    boolean findByStudentId(int studentId);
 }
