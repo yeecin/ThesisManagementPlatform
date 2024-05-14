@@ -56,11 +56,11 @@ public class UserController {
                 //跳转到首页，并将用户信息传入前端,response.headers.location;
                 //保存用户名到session中
                 session.setAttribute("username", user.getUsername());
-
                 response.setHeader("location", "/");
             }else{
                 System.out.println("error");
                 response.getWriter().write("error");
+                response.setHeader("location", "/login");
             }
         }
         else{
