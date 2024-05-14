@@ -76,8 +76,11 @@
                         <span>我已阅读<a target="_blank" href="./User/privacy">《隐私政策》</a>和<a target="_blank" href="./User/agreement">《使用协议》</a></span>
                     </label>
                 </div>
+<!--                <div class="form_register">-->
+<!--                    <a href="./User/Register">注册新账号</a>-->
+<!--                </div>-->
                 <div class="form_register">
-                    <a href="./User/Register">注册新账号</a>
+                    <a href="JavaScript:" id="register" data-type="0" data-img="0">注册新账号</a>
                 </div>
                 <div class="form_btn">
                     <a href="JavaScript:" id="loginBtn" data-type="0" data-img="0">登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</a>
@@ -144,6 +147,17 @@
         }).catch(function (error) {
             console.log(error);
         });
+    }
+    //点击注册新账号时，跳转到对应的注册页面
+    var register = document.getElementById('register');
+    register.onclick = function () {
+        var selectedRoleElement = document.querySelector('.tabs_type span.typeact');
+        var selectedRoleId = selectedRoleElement.getAttribute('data-id');
+        if (selectedRoleId == 3) {
+            window.location.href = '/User/Register';
+        } else if (selectedRoleId == 2) {
+            window.location.href = '/Teacher/Register';
+        }
     }
 </script>
 

@@ -77,6 +77,11 @@ public class UserController {
         return "/User/Register";
     }
 
+    @RequestMapping("/Teacher/Register")
+    public String teacherRegister() {
+        return "/Teacher/Register";
+    }
+
     @RequestMapping("/User/RegisterCheck")
     public void registerCheck(@RequestBody Student student, HttpServletResponse response, HttpSession session) throws IOException {
         // 设置响应的字符集为UTF-8
@@ -92,6 +97,23 @@ public class UserController {
             response.getWriter().write("注册成功");
             //把学生信息存入session
             session.setAttribute("username", student.getStudentName());
+            response.setHeader("location", "/");
+        }
+    }
+    @RequestMapping("/Teacher/RegisterCheck")
+    public void registerCheck(@RequestBody Teacher teacher, HttpServletResponse response, HttpSession session) throws IOException {
+        // 设置响应的字符集为UTF-8
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+
+        //注册检查,判断教师编号是否存在，存在则返回注册界面，不存在则注册成功，返回登录界面
+        if(teacherRepository.findByTeacherId(teacher.getTeacherId())!=null) {
+            response.getWriter().write("教师编号已存在");
+        }else{
+            teacherRepository.save(teacher);
+            response.getWriter().write("注册成功");
+            //把教师信息存入session
+            session.setAttribute("username", teacher.getTeacherName());
             response.setHeader("location", "/");
         }
     }
