@@ -125,6 +125,11 @@
     <script src="/js/vue.global.js"></script>
     <script src="/js/index.full.js"></script>
     <script src="/js/vue-router.global.js"></script>
+    <style>
+        .no-underline {
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
@@ -133,11 +138,11 @@
             <el-row>
                 <el-col :span="18">
                     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                        <el-menu-item index="1">
-                            <router-link to="/">首页</router-link>
+                        <el-menu-item index="1"  type="primary" underline>
+                            <router-link to="/" class="no-underline">首页</router-link>
                         </el-menu-item>
-                        <el-menu-item index="2">
-                            <router-link to="/announcement">公告信息</router-link>
+                        <el-menu-item index="2" type="primary" underline>
+                            <router-link to="/announcement" class="no-underline">公告信息</router-link>
                         </el-menu-item>
                         <el-menu-item index="3">
                             <router-link to="/thesis-topic">论文题目</router-link>
@@ -148,6 +153,11 @@
                         </el-menu-item>
                         <el-menu-item index="5">
                             <el-link v-if="!username" href="./User/Register" type="primary" underline>注册</el-link>
+                        </el-menu-item>
+                        <el-menu-item index="6">
+                            <el-link v-if="username" type="primary" underline>
+                                <router-link to="/personal">用户资料</router-link>
+                            </el-link>
                         </el-menu-item>
                     </el-menu>
                 </el-col>
@@ -177,10 +187,12 @@
     const HomePage = { template: '<div>这是首页</div>' }
     const AnnouncementPage = { template: '<div>这是公告信息页面</div>' }
     const ThesisTopicPage = { template: '<div>这是论文题目页面</div>' }
+    const PersonalPage = { template: '<div>这是个人资料页面</div>' }
     const routes = [
         { path: '/', component: HomePage },
         { path: '/announcement', component: AnnouncementPage },
-        { path: '/thesis-topic', component: ThesisTopicPage }
+        { path: '/thesis-topic', component: ThesisTopicPage },
+        { path: '/personal', component: PersonalPage}
     ]
 
     const app = Vue.createApp({
