@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册界面</title>
+    <link rel="stylesheet" href="/css/default/element-plus.dist.index.css">
+    <style>
+        .centered-form {
+            width: 50%;
+            margin: 0 auto;
+            min_height: 10%;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <h1>注册教师账号</h1>
+    <el-form ref="form" :model="form" label-width="120px" class="centered-form">
+        <el-form-item label="*教师编号">
+            <el-input v-model="form.teacherId"></el-input>
+        </el-form-item>
+        <el-form-item label="*姓名">
+            <el-input v-model="form.teacherName"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+            <el-input v-model="form.email"></el-input>
+        </el-form-item>
+        <el-form-item label="电话">
+            <el-input v-model="form.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="*密码">
+            <el-input v-model="form.password" type="password"></el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="onSubmit">注册</el-button>
+            <el-button type="primary" @click="back">返回登录</el-button>
+        </el-form-item>
+    </el-form>
+</div>
+<!-- Import Vue 3 -->
+<script src="//unpkg.com/vue@3"></script>
+<!-- Import component library -->
+<script src="//unpkg.com/element-plus"></script>
+<script src="/js/axios.min.js"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                form: {
+                    teacherId: '',
+                    teacherName: '',
+                    email: '',
+                    phone: '',
+                    password: ''
+                }
+            }
+        },
+        methods: {
+            onSubmit() {
+                // 验证教师编号，姓名密码不能为空
+                if (!this.form.teacherId || !this.form.teacherName|| !this.form.password) {
+                    alert('*处不能为空');
+                    return;
+                }
+
+                // 验证密码长度不得少于3位
+                if (this.form.password.length < 3) {
+                    alert('密码长度不得少于3位');
+                    return;
+                }
+
+                // 验证电话必须是数字且不得少于8位数字
+                if (!/^\d{8,}$/.test(this.form.phone) && this.form.phone != '') {
+                    alert('电话必须是数字且不得少于8位数字');
+                    return;
+                }
+
+                // 如果所有验证都通过，发送请求
+                axios.post('/Teacher/RegisterCheck', this.form)
+                    .then(response => {
+                        alert(response.data);
+                        window.location.href = response.headers.location;
+                        console.log(response.data);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
+            back() {
+                window.location.href = '/login';
+            }
+        }
+    })
+    app.use(ElementPlus)
+    app.mount('#app')
+</script>
+</body>
+</html>
