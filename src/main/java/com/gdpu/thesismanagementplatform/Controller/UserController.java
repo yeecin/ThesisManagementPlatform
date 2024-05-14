@@ -30,7 +30,12 @@ public class UserController {
         session.removeAttribute("username");
         if(Objects.equals(user.getRole(), "1")){
             System.out.println("admin");
-            //管理员界面（先放着吧）
+            //管理员界面
+            if(Objects.equals(user.getUsername(), "admin") && Objects.equals(user.getPassword(), "admin")){
+                response.setHeader("location", "/admin");
+            }else{
+                response.getWriter().write("error");
+            }
         }else if(Objects.equals(user.getRole(), "2")){
             //判断教师用户账号密码是否正确，返回首页，在response中写入cookie，存储用户信息，传入前端，显示当前用户类型：用户名
             //在数据库中查找教师用户信息，判断是否存在，存在则返回首页，不存在则返回登录界面
