@@ -8,7 +8,7 @@
 </head>
 <body>
 <div id="app">
-  <el-container class="layout-container-demo" style="height: 1000px">
+  <el-container class="layout-container-demo" style="height: 1500px">
     <el-aside width="200px">
       <el-scrollbar>
         <el-menu :default-openeds="['1', '3']">
@@ -45,37 +45,133 @@
         </el-menu>
       </el-scrollbar>
     </el-aside>
-    <el-main>
-      {{ mainContent }}
-    </el-main>
+    <el-container>
+      <el-main v-if="isFormVisible">
+  <!--      {{ mainContent }}-->
+        <el-input v-model="searchInput" placeholder="请输入学生学号"></el-input>
+        <el-button @click="searchStudentById">查询</el-button>
+          <el-table :data="mainContent" style="width: 100%">
+            <el-table-column prop="id" label="学号" width="180"></el-table-column>
+            <el-table-column prop="name" label="姓名" width="180"></el-table-column>
+            <el-table-column prop="class" label="班级" width="180"></el-table-column>
+            <el-table-column prop="major" label="专业" width="180"></el-table-column>
+            <el-table-column
+                    label="操作"
+                    width="120"
+                    fixed="right">
+              <template #default="scope">
+                <el-button @click="editStudent(scope.row)" type="primary" size="small">详情</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+      </el-main>
+      <el-main v-if="isTeacherFormVisible">
+        <el-input v-model="searchInput" placeholder="请输入教师工号"></el-input>
+        <el-button @click="searchTeacherById">查询</el-button>
+        <el-table :data="mainContent" style="width: 100%">
+          <el-table-column prop="id" label="教师工号" width="180"></el-table-column>
+          <el-table-column prop="name" label="教师名字" width="180"></el-table-column>
+          <el-table-column prop="email" label="教师邮箱" width="180"></el-table-column>
+          <el-table-column prop="phone" label="手机号" width="180"></el-table-column>
+          <el-table-column
+                  label="操作"
+                  width="120"
+                  fixed="right">
+            <template #default="scope">
+              <el-button @click="editTeacher(scope.row)" type="primary" size="small">详情</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-main>
+<!--      <el-footer>Footer</el-footer>-->
+    </el-container>
   </el-container>
+
 </div>
 <!-- Import Vue 3 -->
-<script src="//unpkg.com/vue@3"></script>
+<script src=/js/vue.global.js></script>
 <!-- Import component library -->
-<script src="//unpkg.com/element-plus"></script>
+<script src="/js/index.full.js"></script>
 <script>
   const app = Vue.createApp({
     setup() {
       const mainContent = Vue.ref('')
-
+      const isFormVisible = Vue.ref(false)
+      const isTeacherFormVisible = Vue.ref(false)
+      const searchInput = Vue.ref('')
       const loadStudentManagement = async () => {
         const response = await fetch('/admin/getStudents')
-        mainContent.value = await response.json()
+        const students = await response.json()
+        mainContent.value = students.map(student => ({
+          id: student.studentId,
+          name: student.studentName,
+          class: student.grade,
+          major: student.major,
+        }))
+        isTeacherFormVisible.value = false
+        isFormVisible.value = true // 在需要显示表单的时候，将 isFormVisible 的值设置为 true
       }
-      const loadTeacherManagement = () => {
-        mainContent.value = '这里是教师管理的界面'
+      const loadTeacherManagement = async () => {
+        const response = await fetch('/admin/getTeachers')
+        mainContent.value = await response.json()
+        mainContent.value = mainContent.value.map(teacher => ({
+          id: teacher.teacherId,
+          name: teacher.teacherName,
+          email: teacher.email,
+          phone: teacher.phone,
+        }))
+        isFormVisible.value = false
+        isTeacherFormVisible.value = true
+      }
+      const editStudent = (row) => {
+        console.log(row) // 打印出你点击的那一行的数据
+        // 在这里，你可以添加你想要执行的代码，例如打开一个新的页面，显示一个模态框，等等。
+      }
+      const searchStudentById = async () => {
+        const response = await fetch(`/admin/searchStudentById?studentId=${searchInput.value}`)
+        let students = await response.json()
+        if (!Array.isArray(students)) {
+          students = [students]
+        }
+        mainContent.value = students.map(student => ({
+          id: student.studentId,
+          name: student.studentName,
+          class: student.grade,
+          major: student.major,
+        }))
+        isTeacherFormVisible.value = false
+        isFormVisible.value = true
+      }
+      const searchTeacherById = async () => {
+        const response = await fetch(`/admin/searchTeacherById?teacherId=${searchInput.value}`)
+        let teachers = await response.json()
+        if (!Array.isArray(teachers)) {
+          teachers = [teachers]
+        }
+        mainContent.value = teachers.map(teacher => ({
+          id: teacher.teacherId,
+          name: teacher.teacherName,
+          email: teacher.email,
+          phone: teacher.phone,
+        }))
+        isFormVisible.value = false
+        isTeacherFormVisible.value = true
       }
       return {
         mainContent,
         loadStudentManagement,
-        loadTeacherManagement
+        loadTeacherManagement,
+        editStudent ,
+        searchInput,
+        searchStudentById,
+        isFormVisible,
+        isTeacherFormVisible,
+        searchTeacherById
       }
     }
   })
   app.use(ElementPlus)
   app.mount('#app')
-
 </script>
 </body>
 </html>

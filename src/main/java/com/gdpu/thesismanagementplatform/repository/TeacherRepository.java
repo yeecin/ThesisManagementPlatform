@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
     Teacher findByTeacherNameAndPassword(String teacherName, String password);
+
+    Teacher findByTeacherId(int teacherId);
 }

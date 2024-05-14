@@ -79,39 +79,15 @@ public class UserController {
 
     @RequestMapping("/User/RegisterCheck")
     public void registerCheck(@RequestBody Student student, HttpServletResponse response, HttpSession session) throws IOException {
-        // 设置响应的字符集为UTF-8
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
-
-        //注册检查，判断学生学号是否存在，存在则返回注册界面，不存在则注册成功，返回登录界面
+        //注册检查,判断学生学号是否存在，存在则返回注册界面，不存在则注册成功，返回登录界面
         if(studentRepository.findByStudentId(student.getStudentId())!=null) {
-            response.getWriter().write("学号已存在");
+            response.getWriter().write("error");
+
         }else{
             studentRepository.save(student);
-            response.getWriter().write("Success");
             //把学生信息存入session
             session.setAttribute("username", student.getStudentName());
             response.setHeader("location", "/");
-        }
-    }
-
-    @RequestMapping(value = "/User/ResetPassword", method = RequestMethod.POST)
-    public void resetPasswords(@RequestBody Student student, HttpServletResponse response, HttpSession session) throws IOException {
-        // 设置响应的字符集为UTF-8
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
-
-        //重置密码检查，判断学生学号和姓名是否存在，存在则重置密码，不存在则返回重置密码界面
-        if(studentRepository.findByStudentIdAndStudentName(student.getStudentId(), student.getStudentName()) == null){
-            response.getWriter().write("学号或姓名错误");
-        } else {
-            Student student1 = studentRepository.findByStudentIdAndStudentName(student.getStudentId(), student.getStudentName());
-            student1.setPassword(student.getPassword());
-            studentRepository.save(student1);
-            response.getWriter().write("Success");
-            //把学生信息存入session
-            session.setAttribute("username", student.getStudentName());
-            response.setHeader("location", "/login");
         }
     }
 }
