@@ -1,118 +1,181 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>论文管理平台</title>-->
+<!--    <link rel="stylesheet" href="/css/bootstrap.min.css">-->
+<!--    &lt;!&ndash; Import style &ndash;&gt;-->
+<!--    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />-->
+<!--    &lt;!&ndash; Import Vue 3 &ndash;&gt;-->
+<!--    <script src="//unpkg.com/vue@3"></script>-->
+<!--    &lt;!&ndash; Import component library &ndash;&gt;-->
+<!--    <script src="//unpkg.com/element-plus"></script>-->
+<!--    <style>-->
+<!--        .navbar-custom {-->
+<!--            background-color: #007bff;  /* 修改这里来改变导航栏的颜色 */-->
+<!--        }-->
+<!--        .navbar-custom .navbar-brand,-->
+<!--        .navbar-custom .navbar-nav .nav-link {-->
+<!--            color: white;  /* 修改这里来改变导航链接的颜色 */-->
+<!--        }-->
+<!--        .title {-->
+<!--            font-size: 1.5rem;  /* 修改这里来改变标题的大小 */-->
+<!--            color: #007bff;  /* 修改这里来改变标题的颜色 */-->
+<!--        }-->
+<!--        .mainBanner {-->
+<!--            background-color: #007bff;  /* 修改这里来改变主横幅的颜色 */-->
+<!--            color: white;  /* 修改这里来改变主横幅的文字颜色 */-->
+<!--            padding: 10px;-->
+<!--        }-->
+<!--        .mainBannerLeft {-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--        }-->
+<!--        .schoolLogo {-->
+<!--            width: 50px;  /* 修改这里来改变学校logo的大小 */-->
+<!--            height: 50px;  /* 修改这里来改变学校logo的大小 */-->
+<!--            margin-right: 10px;-->
+<!--        }-->
+<!--        .schoolName {-->
+<!--            font-size: 1.5rem;  /* 修改这里来改变学校名称的大小 */-->
+<!--        }-->
+<!--        .systemName {-->
+<!--            font-size: 1.5rem;  /* 修改这里来改变系统名称的大小 */-->
+<!--        }-->
+<!--    </style>-->
+<!--    <script src="/js/vue.global.js"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="mainBanner">-->
+<!--    <div class="mainBannerLeft">-->
+<!--&lt;!&ndash;        <img id="school_logo" class="schoolLogo" style="display:none;" src="" alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span id="school_name" style="display:none;" class="schoolName"></span>&ndash;&gt;-->
+<!--        <span id="xtmc" style="" class="systemName">大学生毕业论文（设计）管理系统</span>-->
+<!--    </div>-->
+<!--</div>-->
+<!--&lt;!&ndash;<div class="container text-center my-3">&ndash;&gt;-->
+<!--&lt;!&ndash;    <h1 class="title">论文管理平台</h1>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--<nav class="navbar navbar-expand-lg navbar-custom">-->
+<!--    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--        <span class="navbar-toggler-icon"></span>-->
+<!--    </button>-->
+<!--    <div class="collapse navbar-collapse" id="navbarNav">-->
+<!--        <ul class="navbar-nav mr-auto">-->
+<!--            <li class="nav-item active">-->
+<!--                <a class="nav-link" href="/">首页</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="#">公告信息</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="#">论文题目</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="./login">登录</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="./User/Register">注册</a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--    <form class="form-inline ml-auto">-->
+<!--        <input class="form-control mr-sm-2" type="search" placeholder="搜索论文" aria-label="Search">-->
+<!--    </form>-->
+<!--</nav>-->
+<!--</body>-->
+<!--<script src="/js/bootstrap.min.js"></script>-->
+<!--<script src="/js/axios.min.js"></script>-->
+<!--<script>-->
+<!--    window.onload = function() {-->
+<!--        axios.get('/getUsername').then(function (response) {-->
+<!--            var username = response.data;-->
+<!--            if (username) {-->
+<!--                var navbar = document.getElementById('navbarNav');-->
+<!--                navbar.innerHTML = `-->
+<!--                <ul class="navbar-nav mr-auto">-->
+<!--                    <li class="nav-item active">-->
+<!--                        <a class="nav-link" href="/">首页</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="#">公告信息</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="#">论文题目</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="./login">当前用户：${username}</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="./User/personal">用户资料</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            `;-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+<!--</script>-->
+<!--</html>-->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>论文管理平台</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <!-- Import style -->
-    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
-    <!-- Import Vue 3 -->
-    <script src="//unpkg.com/vue@3"></script>
-    <!-- Import component library -->
-    <script src="//unpkg.com/element-plus"></script>
-    <style>
-        .navbar-custom {
-            background-color: #007bff;  /* 修改这里来改变导航栏的颜色 */
-        }
-        .navbar-custom .navbar-brand,
-        .navbar-custom .navbar-nav .nav-link {
-            color: white;  /* 修改这里来改变导航链接的颜色 */
-        }
-        .title {
-            font-size: 1.5rem;  /* 修改这里来改变标题的大小 */
-            color: #007bff;  /* 修改这里来改变标题的颜色 */
-        }
-        .mainBanner {
-            background-color: #007bff;  /* 修改这里来改变主横幅的颜色 */
-            color: white;  /* 修改这里来改变主横幅的文字颜色 */
-            padding: 10px;
-        }
-        .mainBannerLeft {
-            display: flex;
-            align-items: center;
-        }
-        .schoolLogo {
-            width: 50px;  /* 修改这里来改变学校logo的大小 */
-            height: 50px;  /* 修改这里来改变学校logo的大小 */
-            margin-right: 10px;
-        }
-        .schoolName {
-            font-size: 1.5rem;  /* 修改这里来改变学校名称的大小 */
-        }
-        .systemName {
-            font-size: 1.5rem;  /* 修改这里来改变系统名称的大小 */
-        }
-    </style>
+    <link rel="stylesheet" href="/css/default/element-plus.dist.index.css" />
     <script src="/js/vue.global.js"></script>
+    <script src="/js/index.full.js"></script>
 </head>
 <body>
-<div class="mainBanner">
-    <div class="mainBannerLeft">
-<!--        <img id="school_logo" class="schoolLogo" style="display:none;" src="" alt="">-->
-<!--        <span id="school_name" style="display:none;" class="schoolName"></span>-->
-        <span id="xtmc" style="" class="systemName">大学生毕业论文（设计）管理系统</span>
-    </div>
+<div id="app">
+    <el-container>
+        <el-header>
+            <el-row>
+                <el-col :span="18">
+                    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                        <el-menu-item index="1">首页</el-menu-item>
+                        <el-menu-item index="2">公告信息</el-menu-item>
+                        <el-menu-item index="3">论文题目</el-menu-item>
+                        <el-menu-item index="4">
+                            <el-link v-if="!username" href="./login" type="primary" underline>登录</el-link>
+                            <span v-else>当前用户：{{ username }}</span>
+                        </el-menu-item>
+                        <el-menu-item index="5">
+                            <el-link v-if="!username" href="./User/Register" type="primary" underline>注册</el-link>
+                        </el-menu-item>
+                    </el-menu>
+                </el-col>
+                <el-col :span="6">
+                    <el-input v-model="searchInput" placeholder="搜索论文" class="search-input"></el-input>
+                </el-col>
+            </el-row>
+        </el-header>
+    </el-container>
 </div>
-<!--<div class="container text-center my-3">-->
-<!--    <h1 class="title">论文管理平台</h1>-->
-<!--</div>-->
-<nav class="navbar navbar-expand-lg navbar-custom">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/">首页</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">公告信息</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">论文题目</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="./login">登录</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="./User/Register">注册</a>
-            </li>
-        </ul>
-    </div>
-    <form class="form-inline ml-auto">
-        <input class="form-control mr-sm-2" type="search" placeholder="搜索论文" aria-label="Search">
-    </form>
-</nav>
-</body>
-<script src="/js/bootstrap.min.js"></script>
 <script src="/js/axios.min.js"></script>
 <script>
-    window.onload = function() {
-        axios.get('/getUsername').then(function (response) {
-            var username = response.data;
-            if (username) {
-                var navbar = document.getElementById('navbarNav');
-                navbar.innerHTML = `
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/">首页</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">公告信息</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">论文题目</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./login">当前用户：${username}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./User/personal">用户资料</a>
-                    </li>
-                </ul>
-            `;
+    const app = Vue.createApp({
+        setup() {
+            const username = Vue.ref('')
+            const searchInput = Vue.ref('')
+            const activeIndex = Vue.ref('1')
+            axios.get('/getUsername')
+                .then(response => {
+                    username.value = response.data
+                })
+            const handleSelect = (index, indexPath) => {
+                console.log(index, indexPath)
+                activeIndex.value = index
             }
-        });
-    }
+            return {
+                username,
+                searchInput,
+                activeIndex,
+                handleSelect
+            }
+        }
+    })
+    app.use(ElementPlus)
+    app.mount('#app')
 </script>
+</body>
 </html>
