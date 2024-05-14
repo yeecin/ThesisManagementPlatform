@@ -12,21 +12,25 @@
     <el-aside width="200px">
       <el-scrollbar>
         <el-menu :default-openeds="['1', '3']">
-          <el-sub-menu index="1">
+          <el-menu-item index="1">
             <template #title>
-              <el-icon><message></message></el-icon>后台首页
+              <el-icon><message></message></el-icon>
+              <span style="font-size: larger; font-weight: bold;">后台首页</span>
             </template>
-            <!-- 子菜单项 -->
-          </el-sub-menu>
+          </el-menu-item>
           <el-menu-item index="2">
             <el-icon><icon-menu></icon-menu></el-icon>轮播图
           </el-menu-item>
           <el-menu-item index="3">
             <el-icon><setting></setting></el-icon>公告信息管理
           </el-menu-item>
-          <el-menu-item index="4">
+          <el-sub-menu index="4">
+            <template #title>
             <el-icon><setting></setting></el-icon>用户管理
-          </el-menu-item>
+            </template>
+            <el-menu-item index="4-1" @click="loadStudentManagement">学生管理</el-menu-item>
+            <el-menu-item index="4-2" @click="loadTeacherManagement">教师管理</el-menu-item>
+          </el-sub-menu>
           <el-sub-menu index="5">
             <template #title>
               <el-icon><setting></setting></el-icon>模块管理
@@ -41,6 +45,9 @@
         </el-menu>
       </el-scrollbar>
     </el-aside>
+    <el-main>
+      {{ mainContent }}
+    </el-main>
   </el-container>
 </div>
 <!-- Import Vue 3 -->
@@ -48,17 +55,27 @@
 <!-- Import component library -->
 <script src="//unpkg.com/element-plus"></script>
 <script>
-
   const app = Vue.createApp({
-    data() {
+    setup() {
+      const mainContent = Vue.ref('')
+
+      const loadStudentManagement = async () => {
+        const response = await fetch('/admin/getStudents')
+        mainContent.value = await response.json()
+      }
+      const loadTeacherManagement = () => {
+        mainContent.value = '这里是教师管理的界面'
+      }
       return {
-        message: 'Hello Vue!'
+        mainContent,
+        loadStudentManagement,
+        loadTeacherManagement
       }
     }
   })
-
   app.use(ElementPlus)
   app.mount('#app')
+
 </script>
 </body>
 </html>
