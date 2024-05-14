@@ -79,15 +79,77 @@ public class UserController {
 
     @RequestMapping("/User/RegisterCheck")
     public void registerCheck(@RequestBody Student student, HttpServletResponse response, HttpSession session) throws IOException {
+        // 设置响应的字符集为UTF-8
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+
         //注册检查,判断学生学号是否存在，存在则返回注册界面，不存在则注册成功，返回登录界面
         if(studentRepository.findByStudentId(student.getStudentId())!=null) {
-            response.getWriter().write("error");
+            response.getWriter().write("用户学号已存在");
 
         }else{
             studentRepository.save(student);
+            response.getWriter().write("注册成功");
             //把学生信息存入session
             session.setAttribute("username", student.getStudentName());
             response.setHeader("location", "/");
         }
+    }
+
+    @RequestMapping(value = "/User/ResetPassword", method = RequestMethod.POST)
+    public void resetPassword(@RequestBody Student student, HttpServletResponse response, HttpSession session) throws IOException {
+        // 设置响应的字符集为UTF-8
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+
+        if(studentRepository.findByStudentIdAndStudentName(student.getStudentId(), student.getStudentName()) == null) {
+            response.getWriter().write("学号或姓名错误");
+        } else {
+            Student student1 = studentRepository.findByStudentIdAndStudentName(student.getStudentId(), student.getStudentName());
+            student1.setPassword(student.getPassword());
+            studentRepository.save(student1);
+            response.getWriter().write("密码修改成功");
+
+            //把学生信息存入session
+            session.setAttribute("username", student.getStudentName());
+            response.setHeader("location", "/login");
+        }
+    }
+
+    @RequestMapping(value = "/User/UpdateProfile", method = RequestMethod.POST)
+    public void updateProfile(@RequestBody Student student, HttpServletResponse response, HttpSession session) throws IOException {
+        // 设置响应的字符集为UTF-8
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+
+        // 根据用户名查找用户
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            response.getWriter().write("用户未登录");
+        } else {
+            Student student1 = studentRepository.findByStudentName(username);
+            // 更新用户信息
+            student1.setStudentName(student.getStudentName());
+            student1.setEmail(student.getEmail());
+            student1.setPhone(student.getPhone());
+            studentRepository.save(student1);
+            session.setAttribute("username", student.getStudentName());
+            response.getWriter().write("更新成功");
+        }
+    }
+
+    @RequestMapping(value = "/User/GetProfile", method = RequestMethod.GET)
+    @ResponseBody
+    public Student getProfile(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+
+        // 根据用户名查找用户
+        Student student = studentRepository.findByStudentName(username);
+        if (student != null) {
+            return student;
+        }
+
+        // 如果找不到用户，返回null
+        return null;
     }
 }

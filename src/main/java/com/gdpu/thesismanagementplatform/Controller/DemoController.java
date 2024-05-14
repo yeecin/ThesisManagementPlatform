@@ -29,6 +29,10 @@ public class DemoController {
     public String login() {
         return "login";
     }
+    @RequestMapping("/User/personal")
+    public String personal() {
+        return "User/personal";
+    }
     @RequestMapping("/User/privacy")
     public String privacy() {
         return "User/privacy";
