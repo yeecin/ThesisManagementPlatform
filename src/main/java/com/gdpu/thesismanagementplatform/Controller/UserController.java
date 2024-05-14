@@ -77,10 +77,10 @@ public class UserController {
         return "/User/Register";
     }
 
-    @RequestMapping("/User/RegisterCheck")
+    @RequestMapping(value = "/User/RegisterCheck",method = RequestMethod.POST)
     public void registerCheck(@RequestBody Student student, HttpServletResponse response, HttpSession session) throws IOException {
         //注册检查,判断学生学号是否存在，存在则返回注册界面，不存在则注册成功，返回登录界面
-        if(!studentRepository.findByStudentId(student.getStudentId())) {
+        if(studentRepository.findByStudentId(student.getStudentId())!= null) {
             response.getWriter().write("error");
         }else{
             studentRepository.save(student);
