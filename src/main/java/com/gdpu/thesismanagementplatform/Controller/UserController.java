@@ -81,12 +81,12 @@ public class UserController {
     public void registerCheck(@RequestBody Student student, HttpServletResponse response, HttpSession session) throws IOException {
         //注册检查,判断学生学号是否存在，存在则返回注册界面，不存在则注册成功，返回登录界面
         if(studentRepository.findByStudentId(student.getStudentId())!=null) {
-            response.getWriter().write("error");
-
+            response.getWriter().write("用户已存在");
         }else{
             studentRepository.save(student);
             //把学生信息存入session
             session.setAttribute("username", student.getStudentName());
+            response.getWriter().write("注册成功");
             response.setHeader("location", "/");
         }
     }

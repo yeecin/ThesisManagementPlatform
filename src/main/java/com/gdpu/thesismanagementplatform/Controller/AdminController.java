@@ -1,6 +1,7 @@
 package com.gdpu.thesismanagementplatform.Controller;
 
 import com.gdpu.thesismanagementplatform.pojo.Student;
+import com.gdpu.thesismanagementplatform.pojo.Teacher;
 import com.gdpu.thesismanagementplatform.repository.StudentRepository;
 import com.gdpu.thesismanagementplatform.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,10 @@ public class AdminController {
     @ResponseBody
     public List<Student> getStudents() {
         return studentRepository.findAll();
+    }
+    @RequestMapping("/getTeachers")
+    @ResponseBody
+    public List<Teacher> getTeachers() {
+        return teacherRepository.findAll();
     }
 }

@@ -8,7 +8,7 @@
 </head>
 <body>
 <div id="app">
-  <el-container class="layout-container-demo" style="height: 1000px">
+  <el-container class="layout-container-demo" style="height: 1500px">
     <el-aside width="200px">
       <el-scrollbar>
         <el-menu :default-openeds="['1', '3']">
@@ -45,37 +45,63 @@
         </el-menu>
       </el-scrollbar>
     </el-aside>
-    <el-main>
-      {{ mainContent }}
+    <el-main v-if="isFormVisible">
+<!--      {{ mainContent }}-->
+        <el-table :data="mainContent" style="width: 100%">
+          <el-table-column prop="id" label="学号" width="180"></el-table-column>
+          <el-table-column prop="name" label="姓名" width="180"></el-table-column>
+          <el-table-column prop="class" label="班级" width="180"></el-table-column>
+          <el-table-column prop="major" label="专业" width="180"></el-table-column>
+          <el-table-column
+                  label="操作"
+                  width="120"
+                  fixed="right">
+            <template>
+              <el-button  @click="editStudent(scope.row)" type="text" size="small">详情</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
     </el-main>
   </el-container>
 </div>
 <!-- Import Vue 3 -->
-<script src="//unpkg.com/vue@3"></script>
+<script src=/js/vue.global.js></script>
 <!-- Import component library -->
-<script src="//unpkg.com/element-plus"></script>
+<script src="/js/index.full.js"></script>
 <script>
   const app = Vue.createApp({
     setup() {
       const mainContent = Vue.ref('')
-
+      const isFormVisible = Vue.ref(false) // 新增
       const loadStudentManagement = async () => {
         const response = await fetch('/admin/getStudents')
-        mainContent.value = await response.json()
+        const students = await response.json()
+        mainContent.value = students.map(student => ({
+          id: student.studentId,
+          name: student.studentName,
+          class: student.grade,
+          major: student.major,
+        }))
+        isFormVisible.value = true // 在需要显示表单的时候，将 isFormVisible 的值设置为 true
       }
-      const loadTeacherManagement = () => {
-        mainContent.value = '这里是教师管理的界面'
+      const loadTeacherManagement = async () => {
+        const response = await fetch('/admin/getTeachers')
+        mainContent.value = await response.json()
       }
       return {
         mainContent,
         loadStudentManagement,
-        loadTeacherManagement
+        loadTeacherManagement,
+        isFormVisible // 新增
       }
     }
   })
   app.use(ElementPlus)
-  app.mount('#app')
+  // app.component('message', Message)
+  // app.component('icon-menu', IconMenu)
+  // app.component('setting', Setting)
 
+  app.mount('#app')
 </script>
 </body>
 </html>
