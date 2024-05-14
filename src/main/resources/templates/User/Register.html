@@ -2,25 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>大学生毕业论文（设计）管理系统 - 注册</title>
+    <title>注册界面</title>
     <link rel="stylesheet" href="/css/default/element-plus.dist.index.css">
     <style>
         .centered-form {
             width: 50%;
             margin: 0 auto;
         }
+        h1 {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 <div id="app">
+    <h1>注册学生账号</h1>
     <el-form ref="form" :model="form" label-width="120px" class="centered-form">
-        <el-form-item label="学号">
+        <el-form-item label="*学号">
             <el-input v-model="form.studentId"></el-input>
         </el-form-item>
-        <el-form-item label="姓名">
+        <el-form-item label="*姓名">
             <el-input v-model="form.studentName"></el-input>
         </el-form-item>
-        <el-form-item label="专业">
+        <el-form-item label="*专业">
             <el-input v-model="form.major"></el-input>
         </el-form-item>
         <el-form-item label="年级">
@@ -32,11 +36,12 @@
         <el-form-item label="电话">
             <el-input v-model="form.phone"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="*密码">
             <el-input v-model="form.password" type="password"></el-input>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="onSubmit">注册</el-button>
+            <el-button type="primary" @click="back">返回登录</el-button>
         </el-form-item>
     </el-form>
 </div>
@@ -62,6 +67,25 @@
         },
         methods: {
             onSubmit() {
+                // 验证学号，姓名，专业，密码不能为空
+                if (!this.form.studentId || !this.form.studentName || !this.form.major || !this.form.password) {
+                    alert('*处不能为空');
+                    return;
+                }
+
+                // 验证密码长度不得少于3位
+                if (this.form.password.length < 3) {
+                    alert('密码长度不得少于3位');
+                    return;
+                }
+
+                // 验证电话必须是数字且不得少于8位数字
+                if (!/^\d{8,}$/.test(this.form.phone) && this.form.phone != '') {
+                    alert('电话必须是数字且不得少于8位数字');
+                    return;
+                }
+
+                // 如果所有验证都通过，发送请求
                 axios.post('/User/RegisterCheck', this.form)
                     .then(response => {
                         alert(response.data);
@@ -71,6 +95,9 @@
                     .catch(error => {
                         console.log(error);
                     });
+            },
+            back() {
+                window.location.href = '/login';
             }
         }
     })
