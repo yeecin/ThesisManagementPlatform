@@ -3,21 +3,28 @@ package com.gdpu.thesismanagementplatform.pojo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 import lombok.Data;
 
 @Data
 @Entity
 public class Thesis {
-    //论文id，论文题目，学生id，教师id，论文内容，论文状态
     @Id
     @Column(nullable = false)
     private int thesisId;
+
     @Column(nullable = false)
     private String title;
-    @Column(nullable = false)
-    private int studentId;
-    @Column(nullable = false)
-    private int teacherId;
+
+    @ManyToOne
+    @JoinColumn(name="student_id", nullable = false)
+    private Student student;
+
+    @ManyToOne
+    @JoinColumn(name="teacher_id", nullable = false)
+    private Teacher teacher;
+
     private String content;
     private String status;
 }

@@ -2,8 +2,10 @@ package com.gdpu.thesismanagementplatform.Controller;
 
 import com.gdpu.thesismanagementplatform.pojo.Student;
 import com.gdpu.thesismanagementplatform.pojo.Teacher;
+import com.gdpu.thesismanagementplatform.pojo.Thesis;
 import com.gdpu.thesismanagementplatform.repository.StudentRepository;
 import com.gdpu.thesismanagementplatform.repository.TeacherRepository;
+import com.gdpu.thesismanagementplatform.repository.ThesisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,8 @@ public class AdminController {
     private TeacherRepository teacherRepository;
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private ThesisRepository thesisRepository;
 
     @RequestMapping("/getStudents")
     @ResponseBody
@@ -39,5 +43,18 @@ public class AdminController {
     @ResponseBody
     public Teacher searchTeacher(@Param("teacherId") int teacherId) {
         return teacherRepository.findByTeacherId(teacherId);
+    }
+    @RequestMapping("/getThesisTitles")
+    @ResponseBody
+    public List<Thesis> getThesisTitles() {
+        return thesisRepository.findAll();
+    }
+    @RequestMapping("/updateStudent")
+    @ResponseBody
+    public Student updateStudent(@Param("studentId") int studentId, @Param("studentName") String studentName, @Param("studentPassword") String studentPassword) {
+        Student student = studentRepository.findByStudentId(studentId);
+        student.setStudentName(studentName);
+        student.setPassword(studentPassword);
+        return studentRepository.save(student);
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>后台管理界面</title>
@@ -11,7 +11,7 @@
   <el-container class="layout-container-demo" style="height: 1500px">
     <el-aside width="200px">
       <el-scrollbar>
-        <el-menu :default-openeds="['1', '3']">
+        <el-menu :default-openeds="['1', '3','4','4-1','4-2','5', '5-1', '5-2', '5-3', '5-4', '5-5', '5-6']">
           <el-menu-item index="1">
             <template #title>
               <el-icon><message></message></el-icon>
@@ -35,7 +35,7 @@
             <template #title>
               <el-icon><setting></setting></el-icon>模块管理
             </template>
-            <el-menu-item index="5-1">论文题目</el-menu-item>
+            <el-menu-item index="5-1" @click="loadThesisTitles" >论文题目</el-menu-item>
             <el-menu-item index="5-2">论文文档</el-menu-item>
             <el-menu-item index="5-3">论文指导</el-menu-item>
             <el-menu-item index="5-4">论文成绩</el-menu-item>
@@ -45,6 +45,7 @@
         </el-menu>
       </el-scrollbar>
     </el-aside>
+<!--    <el-container th:replace="${content} :: content"></el-container>-->
     <el-container>
       <el-main v-if="isFormVisible">
   <!--      {{ mainContent }}-->
@@ -86,7 +87,26 @@
 <!--      <el-footer>Footer</el-footer>-->
     </el-container>
   </el-container>
-
+  <el-dialog :visible.sync="isDialogVisible" title="编辑学生信息">
+    <el-form :model="editingStudent">
+      <el-form-item label="学号">
+        <el-input v-model="editingStudent.id" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="姓名">
+        <el-input v-model="editingStudent.name"></el-input>
+      </el-form-item>
+      <el-form-item label="班级">
+        <el-input v-model="editingStudent.class"></el-input>
+      </el-form-item>
+      <el-form-item label="专业">
+        <el-input v-model="editingStudent.major"></el-input>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="isDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="updateStudent">确 定</el-button>
+  </span>
+  </el-dialog>
 </div>
 <!-- Import Vue 3 -->
 <script src=/js/vue.global.js></script>
@@ -95,7 +115,17 @@
 <script>
   const app = Vue.createApp({
     setup() {
+      // //用于提交请求到后端，加载模板loadStudentManagement.html
+      // const loadStudentManagement = async () => {
+      //   const response = await fetch('/admin/loadStudentManagement')
+      // }
       const mainContent = Vue.ref('')
+      const editingStudent = Vue.ref(null)
+      const isDialogVisible = Vue.ref(false)
+      const editStudent = (row) => {
+        editingStudent.value = { ...row }
+        isDialogVisible.value = true
+      }
       const isFormVisible = Vue.ref(false)
       const isTeacherFormVisible = Vue.ref(false)
       const searchInput = Vue.ref('')
@@ -123,9 +153,17 @@
         isFormVisible.value = false
         isTeacherFormVisible.value = true
       }
-      const editStudent = (row) => {
-        console.log(row) // 打印出你点击的那一行的数据
-        // 在这里，你可以添加你想要执行的代码，例如打开一个新的页面，显示一个模态框，等等。
+      const updateStudent = async () => {
+        await fetch(`/admin/updateStudent`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(editingStudent.value),
+        })
+        isDialogVisible.value = false
+        // 重新加载学生数据
+        await loadStudentManagement()
       }
       const searchStudentById = async () => {
         const response = await fetch(`/admin/searchStudentById?studentId=${searchInput.value}`)
@@ -157,16 +195,27 @@
         isFormVisible.value = false
         isTeacherFormVisible.value = true
       }
+      const loadThesisTitles = async () => {
+        const response = await fetch('/admin/getThesisTitles')
+        mainContent.value = await response.json()
+
+        isFormVisible.value = false
+        isTeacherFormVisible.value = false
+      }
       return {
         mainContent,
         loadStudentManagement,
         loadTeacherManagement,
-        editStudent ,
+        editingStudent,
+        isDialogVisible,
+        editStudent,
+        updateStudent,
         searchInput,
         searchStudentById,
         isFormVisible,
         isTeacherFormVisible,
-        searchTeacherById
+        searchTeacherById,
+        loadThesisTitles
       }
     }
   })
