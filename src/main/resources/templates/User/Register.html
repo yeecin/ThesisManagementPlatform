@@ -4,10 +4,16 @@
     <meta charset="UTF-8">
     <title>大学生毕业论文（设计）管理系统 - 注册</title>
     <link rel="stylesheet" href="/css/default/element-plus.dist.index.css">
+    <style>
+        .centered-form {
+            width: 50%;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
-    <el-form ref="form" :model="form" label-width="120px">
+    <el-form ref="form" :model="form" label-width="120px" class="centered-form">
         <el-form-item label="学号">
             <el-input v-model="form.studentId"></el-input>
         </el-form-item>
