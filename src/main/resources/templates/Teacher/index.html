@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>教师首页</title>
+    <link rel="stylesheet" href="/css/default/element-plus.dist.index.css" />
+    <script src="/js/vue.global.js"></script>
+    <script src="/js/index.full.js"></script>
+    <script src="/js/vue-router.global.js"></script>
+    <style>
+        .no-underline {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>
+            <el-row>
+                <el-col :span="18">
+                    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                        <el-menu-item index="1"  type="primary" underline>
+                            <router-link to="/" class="no-underline">首页</router-link>
+                        </el-menu-item>
+                        <el-menu-item index="2" type="primary" underline>
+                            <router-link to="/announcement" class="no-underline">公告信息</router-link>
+                        </el-menu-item>
+                        <el-menu-item index="3">
+                            <router-link to="/studentThesis">学生毕业论文</router-link>
+                        </el-menu-item>
+                        <el-menu-item index="4">
+                            <el-link v-if="!username" href="./login" type="primary" underline>登录</el-link>
+                            <span v-else>当前用户：{{ username }}</span>
+                        </el-menu-item>
+                        <el-menu-item index="5">
+                            <el-link v-if="username" type="primary" underline>
+                                <router-link to="/personal">用户资料</router-link>
+                            </el-link>
+                        </el-menu-item>
+                    </el-menu>
+                </el-col>
+                <el-col :span="6">
+                    <el-input v-model="searchInput" placeholder="搜索论文" class="search-input"></el-input>
+                </el-col>
+            </el-row>
+        </el-header>
+        <el-main>
+            <router-view></router-view>
+        </el-main>
+    </el-container>
+</div>
+<script src="/js/axios.min.js"></script>
+<script>
+    const HomePage = { template: '<div>这是首页</div>' }
+    const AnnouncementPage = { template: '<div>这是公告信息页面</div>' }
+    const StudentThesisPage = { template: '<div>这是学生毕业论文页面</div>' }
+    const PersonalPage = { template: '<div>这是个人资料页面</div>' }
+    const routes = [
+        { path: '/', component: HomePage },
+        { path: '/announcement', component: AnnouncementPage },
+        { path: '/studentThesis', component: StudentThesisPage },
+        { path: '/personal', component: PersonalPage}
+    ]
+
+    const app = Vue.createApp({
+        setup() {
+            const username = Vue.ref('')
+            const searchInput = Vue.ref('')
+            const activeIndex = Vue.ref('1')
+            axios.get('/getUsername')
+                .then(response => {
+                    username.value = response.data
+                })
+            const handleSelect = (index, indexPath) => {
+                console.log(index, indexPath)
+                activeIndex.value = index
+            }
+            return {
+                username,
+                searchInput,
+                activeIndex,
+                handleSelect
+            }
+        }
+    })
+
+    const router = VueRouter.createRouter({
+        history: VueRouter.createWebHashHistory(),
+        routes
+    })
+
+    app.use(ElementPlus)
+    app.use(router)
+    app.mount('#app')
+</script>
+</body>
+</html>

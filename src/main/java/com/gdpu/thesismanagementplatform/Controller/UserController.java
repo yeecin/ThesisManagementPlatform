@@ -42,6 +42,8 @@ public class UserController {
             Teacher teacher = teacherRepository.findByTeacherNameAndPassword(user.getUsername(), user.getPassword());
             if(teacher != null){
                 System.out.println("teacher:"+teacher);
+                session.setAttribute("username", user.getUsername());
+                response.setHeader("location", "/Teacher/index");
             }else{
                 response.getWriter().write("error");
             }
@@ -80,6 +82,10 @@ public class UserController {
     @RequestMapping("/Teacher/Register")
     public String teacherRegister() {
         return "/Teacher/Register";
+    }
+    @RequestMapping("/Teacher/index")
+    public String teacherIndex() {
+        return "/Teacher/index";
     }
 
     @RequestMapping("/User/RegisterCheck")
