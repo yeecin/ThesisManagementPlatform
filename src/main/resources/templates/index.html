@@ -124,6 +124,7 @@
     <link rel="stylesheet" href="/css/default/element-plus.dist.index.css" />
     <script src="/js/vue.global.js"></script>
     <script src="/js/index.full.js"></script>
+    <script src="/js/vue-router.global.js"></script>
 </head>
 <body>
 <div id="app">
@@ -132,9 +133,15 @@
             <el-row>
                 <el-col :span="18">
                     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                        <el-menu-item index="1">首页</el-menu-item>
-                        <el-menu-item index="2">公告信息</el-menu-item>
-                        <el-menu-item index="3">论文题目</el-menu-item>
+                        <el-menu-item index="1">
+                            <router-link to="/">首页</router-link>
+                        </el-menu-item>
+                        <el-menu-item index="2">
+                            <router-link to="/announcement">公告信息</router-link>
+                        </el-menu-item>
+                        <el-menu-item index="3">
+                            <router-link to="/thesis-topic">论文题目</router-link>
+                        </el-menu-item>
                         <el-menu-item index="4">
                             <el-link v-if="!username" href="./login" type="primary" underline>登录</el-link>
                             <span v-else>当前用户：{{ username }}</span>
@@ -150,17 +157,18 @@
             </el-row>
         </el-header>
         <el-main>
-            <el-container>
-                <el-main>
-                    <div class="mainBanner">
-                        <div class="mainBannerLeft">
-                            <img id="school_logo" class="schoolLogo" style="display:none;" src="" alt="">
-                            <span id="school_name" style="display:none;" class="schoolName"></span>
-                            <span id="xtmc" style="" class="systemName">大学生毕业论文（设计）管理系统</span>
-                        </div>
-                    </div>
-                </el-main>
-            </el-container>
+            <router-view></router-view>
+<!--            <el-container>-->
+<!--                <el-main>-->
+<!--                    <div class="mainBanner">-->
+<!--                        <div class="mainBannerLeft">-->
+<!--                            <img id="school_logo" class="schoolLogo" style="display:none;" src="" alt="">-->
+<!--                            <span id="school_name" style="display:none;" class="schoolName"></span>-->
+<!--                            <span id="xtmc" style="" class="systemName">大学生毕业论文（设计）管理系统</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </el-main>-->
+<!--            </el-container>-->
         </el-main>
     </el-container>
 </div>
@@ -168,6 +176,18 @@
 <script>
     const app = Vue.createApp({
         setup() {
+            const HomePage = { template: '<div>这是首页</div>' }
+            const AnnouncementPage = { template: '<div>这是公告信息页面</div>' }
+            const ThesisTopicPage = { template: '<div>这是论文题目页面</div>' }
+            const routes = [
+                { path: '/', component: HomePage },
+                { path: '/announcement', component: AnnouncementPage },
+                { path: '/thesis-topic', component: ThesisTopicPage }
+            ]
+            const router = VueRouter.createRouter({
+                history: VueRouter.createWebHashHistory(),
+                routes
+            })
             const username = Vue.ref('')
             const searchInput = Vue.ref('')
             const activeIndex = Vue.ref('1')
