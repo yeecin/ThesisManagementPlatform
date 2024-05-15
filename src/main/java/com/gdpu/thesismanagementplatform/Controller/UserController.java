@@ -128,7 +128,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/User/ResetPassword", method = RequestMethod.POST)
-    public void resetPassword(@RequestBody Student student, HttpServletResponse response, HttpSession session) throws IOException {
+    public void resetStudentPassword(@RequestBody Student student, HttpServletResponse response, HttpSession session) throws IOException {
         // 设置响应的字符集为UTF-8
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
@@ -143,6 +143,26 @@ public class UserController {
 
             //把学生信息存入session
             session.setAttribute("username", student.getStudentName());
+            response.setHeader("location", "/login");
+        }
+    }
+
+    @RequestMapping(value = "/Teacher/ResetPassword", method = RequestMethod.POST)
+    public void resetTeacherPassword(@RequestBody Teacher teacher, HttpServletResponse response, HttpSession session) throws IOException {
+        // 设置响应的字符集为UTF-8
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+
+        if(teacherRepository.findByTeacherIdAndTeacherName(teacher.getTeacherId(), teacher.getTeacherName()) == null) {
+            response.getWriter().write("教师编号或姓名错误");
+        } else {
+            Teacher teacher1 = teacherRepository.findByTeacherIdAndTeacherName(teacher.getTeacherId(), teacher.getTeacherName());
+            teacher1.setPassword(teacher.getPassword());
+            teacherRepository.save(teacher1);
+            response.getWriter().write("密码修改成功");
+
+            //把教师信息存入session
+            session.setAttribute("username", teacher.getTeacherName());
             response.setHeader("location", "/login");
         }
     }
