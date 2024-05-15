@@ -20,23 +20,18 @@
             <el-row>
                 <el-col :span="18">
                     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                        <el-menu-item index="1"  type="primary" underline>
+                        <el-menu-item index="1">
                             <router-link to="/" class="no-underline">首页</router-link>
                         </el-menu-item>
-                        <el-menu-item index="2" type="primary" underline>
+                        <el-menu-item index="2">
                             <router-link to="/announcement" class="no-underline">公告信息</router-link>
                         </el-menu-item>
                         <el-menu-item index="3">
-                            <router-link to="/studentThesis">学生毕业论文</router-link>
+                            <router-link to="/studentThesis" class="no-underline">学生毕业论文</router-link>
                         </el-menu-item>
                         <el-menu-item index="4">
-                            <el-link v-if="!username" href="./login" type="primary" underline>登录</el-link>
-                            <span v-else>当前用户：{{ username }}</span>
-                        </el-menu-item>
-                        <el-menu-item index="5">
-                            <el-link v-if="username" type="primary" underline>
-                                <router-link to="/personal">用户资料</router-link>
-                            </el-link>
+                            <el-link v-if="!username" href="/login">登录</el-link>
+                            <el-link v-else href="/login">当前用户：{{ username }}</el-link>
                         </el-menu-item>
                     </el-menu>
                 </el-col>

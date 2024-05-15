@@ -383,7 +383,95 @@
       </div>
     `,
   }
-  const loadTeacherManagementPage = { template: '<h1>教师管理</h1>' }
+  const loadTeacherManagementPage = {
+    setup(){
+      const mainContent = Vue.ref('')
+      const editingTeacher = Vue.ref(null)
+      const isDialogVisible = Vue.ref(false)
+      const editTeacher = (row) => {
+        editingTeacher.value = { ...row }
+        isDialogVisible.value = true
+      }
+      const searchInput = Vue.ref('')
+      const searchTeacherById = async () => {
+        const url = searchInput.value ? `/admin/searchTeacherById?teacherId=${searchInput.value}` : '/admin/getTeachers';
+        const response = await fetch(url)
+        let teachers = await response.json()
+        if (!Array.isArray(teachers)) {
+          teachers = [teachers]
+        }
+        mainContent.value = teachers.map(teacher => ({
+          id: teacher.teacherId,
+          name: teacher.teacherName,
+          email: teacher.email,
+          phone: teacher.phone,
+        }))
+      }
+      const updateTeacher = async () => {
+        await fetch(`/admin/updateTeacher`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(editingTeacher.value),
+        })
+        isDialogVisible.value = false
+        // 重新加载教师数据
+        await searchTeacherById()
+      }
+      // 默认加载所有教师
+      searchTeacherById();
+      return {
+        mainContent,
+        editingTeacher,
+        isDialogVisible,
+        editTeacher,
+        searchInput,
+        searchTeacherById,
+        updateTeacher,
+      }
+    },
+    template: `
+    <div>
+      <el-input v-model="searchInput" placeholder="请输入教师工号"></el-input>
+      <el-button @click="searchTeacherById">查询</el-button>
+      <el-table :data="mainContent" style="width: 100%">
+        <el-table-column prop="id" label="教师工号" width="180"></el-table-column>
+        <el-table-column prop="name" label="教师名字" width="180"></el-table-column>
+        <el-table-column prop="email" label="教师邮箱" width="180"></el-table-column>
+        <el-table-column prop="phone" label="手机号" width="180"></el-table-column>
+        <el-table-column
+                label="操作"
+                width="120"
+                fixed="right">
+          <template #default="scope">
+            <el-button @click="editTeacher(scope.row)" type="primary" size="small">详情</el-button>
+            <el-dialog :visible.sync="isDialogVisible" title="编辑教师信息">
+              <el-form :model="editingTeacher">
+                <el-form-item label="教师工号">
+                  <el-input v-model="editingTeacher.id" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="教师名字">
+                  <el-input v-model="editingTeacher.name"></el-input>
+                </el-form-item>
+                <el-form-item label="教师邮箱">
+                  <el-input v-model="editingTeacher.email"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号">
+                  <el-input v-model="editingTeacher.phone"></el-input>
+                </el-form-item>
+              </el-form>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="isDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="updateTeacher">确 定</el-button>
+              </span>
+            </el-dialog>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+  `,
+  }
   const loadThesisTitlesPage = { template: '<h1>论文题目</h1>' }
   const routes = [
     { path: '/admin/loadStudentManagement', component: loadStudentManagementPage },

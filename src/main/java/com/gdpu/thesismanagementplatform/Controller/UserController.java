@@ -32,9 +32,10 @@ public class UserController {
             System.out.println("admin");
             //管理员界面
             if(Objects.equals(user.getUsername(), "admin") && Objects.equals(user.getPassword(), "admin")){
+                response.getWriter().write("success");
                 response.setHeader("location", "/admin");
             }else{
-                response.getWriter().write("error");
+                response.getWriter().write("fail");
             }
         }else if(Objects.equals(user.getRole(), "2")){
             //判断教师用户账号密码是否正确，返回首页，在response中写入cookie，存储用户信息，传入前端，显示当前用户类型：用户名
@@ -43,9 +44,10 @@ public class UserController {
             if(teacher != null){
                 System.out.println("teacher:"+teacher);
                 session.setAttribute("username", user.getUsername());
+                response.getWriter().write("success");
                 response.setHeader("location", "/Teacher/index");
             }else{
-                response.getWriter().write("error");
+                response.getWriter().write("fail");
             }
         }
         else if(Objects.equals(user.getRole(), "3")){
@@ -58,10 +60,11 @@ public class UserController {
                 //跳转到首页，并将用户信息传入前端,response.headers.location;
                 //保存用户名到session中
                 session.setAttribute("username", user.getUsername());
+                response.getWriter().write("success");
                 response.setHeader("location", "/");
             }else{
                 System.out.println("error");
-                response.getWriter().write("error");
+                response.getWriter().write("fail");
                 response.setHeader("location", "/login");
             }
         }
