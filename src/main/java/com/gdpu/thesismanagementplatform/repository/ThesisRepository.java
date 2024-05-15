@@ -1,5 +1,6 @@
 package com.gdpu.thesismanagementplatform.repository;
 
+import com.gdpu.thesismanagementplatform.pojo.Thesis;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.gdpu.thesismanagementplatform.pojo.Thesis;
 import java.util.List;
