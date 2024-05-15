@@ -133,7 +133,7 @@ public class UserController {
             response.getWriter().write("注册成功");
             //把教师信息存入session
             session.setAttribute("username", teacher.getTeacherName());
-            response.setHeader("location", "/");
+            response.setHeader("location", "/Teacher/index");
         }
     }
 
