@@ -516,14 +516,10 @@
     },
     template: `
       <div>
-        <el-row v-for="announcement in announcements" @click="selectAnnouncement(announcement)" :key="announcement.id">
-          <el-col :span="24">
-            <el-card>
-              <h2>{{ announcement.title }}</h2>
-              <p>{{ announcement.content }}</p>
-            </el-card>
-          </el-col>
-        </el-row>
+        <div v-for="announcement in announcements" @click="selectAnnouncement(announcement)">
+          <h2>{{ announcement.title }}</h2>
+          <p>{{ announcement.content }}</p>
+        </div>
         <el-form :model="form" label-width="120px">
           <el-form-item label="公告标题">
             <el-input v-model="form.title"></el-input>

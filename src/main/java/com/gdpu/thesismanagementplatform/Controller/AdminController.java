@@ -74,4 +74,9 @@ public class AdminController {
     public List<Announcement> getAnnouncements() {
         return announcementRepository.findAll();
     }
+    @PutMapping("/updateAnnouncement")
+    @ResponseBody
+    public Announcement updateAnnouncement(@RequestBody Announcement announcement) {
+        return announcementRepository.save(announcement);
+    }
 }
