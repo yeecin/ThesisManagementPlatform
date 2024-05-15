@@ -66,9 +66,6 @@
                 { id: 3, url: 'https://www.gdpu.edu.cn/tp/xishuihu.jpg' }
             ]);
             const announcements = Vue.ref([
-                { id: 1, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：' },
-                { id: 2, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：' },
-                { id: 3, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：'}
             ]);
 
             const fetchProfile = () => {
@@ -137,21 +134,6 @@
     `,
         setup() {
             const announcements = Vue.ref([
-                {
-                    id: 1,
-                    title: '关于2021年毕业设计（论文）工作的通知',
-                    content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：'
-                },
-                {
-                    id: 2,
-                    title: '关于2021年毕业设计（论文）工作的通知',
-                    content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：'
-                },
-                {
-                    id: 3,
-                    title: '关于2021年毕业设计（论文）工作的通知',
-                    content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：'
-                }
             ]);
 
             const fetchProfile = () => {
@@ -298,57 +280,45 @@
     }
     const UploadPage = {
         template: `
-          <el-upload
-              v-model:file-list="fileList"
-              class="upload-demo"
-              multiple
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
-              :before-upload="beforeUpload"
-              :limit="3"
-              :on-exceed="handleExceed"
-          >
-            <el-button type="primary">点击上传论文</el-button>
-          </el-upload>
+          <div>
+            <el-upload
+                class="upload-demo"
+                action="/api/thesis/upload"
+                :on-success="handleSuccess"
+                :before-upload="beforeUpload">
+              <el-button type="primary" :loading="uploading">点击上传</el-button>
+            </el-upload>
+
+            <div v-html="previewContent"></div>
+          </div>
         `,
         data() {
             return {
-                fileList: [
-                ]
-            }
+                uploading: false,
+                previewContent: ''
+            };
         },
         methods: {
-            handleRemove(file, uploadFiles) {
-                console.log(file, uploadFiles)
-            },
-            handlePreview(uploadFile) {
-                console.log(uploadFile)
-            },
-            handleExceed(files, uploadFiles) {
-                this.$message.warning(
-                    `The limit is 3, you selected ${files.length} files this time, add up to ${
-                        files.length + uploadFiles.length
-                    } totally`
-                )
-            },
-            beforeRemove(uploadFile, uploadFiles) {
-                return this.$confirm(
-                    `Cancel the transfer of ${uploadFile.name} ?`
-                ).then(
-                    () => true,
-                    () => false
-                )
-            },
             beforeUpload(file) {
-                const isDoc = file.type === 'application/msword';
-                const isDocx = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-                const isPdf = file.type === 'application/pdf';
-                if (!isDoc && !isDocx && !isPdf) {
-                    this.$message.error('上传论文只能是 doc/docx/pdf 格式!');
-                    return false;
-                }
+                this.uploading = true;
                 return true;
+            },
+            handleSuccess(response, file) {
+                this.uploading = false;
+                if (response && response.fileDownloadUri) {
+                    // Assuming the response contains the fileDownloadUri for preview
+                    this.loadPreview(response.fileDownloadUri);
+                }
+            },
+            loadPreview(fileDownloadUri) {
+                // Make a GET request to fetch the file content for preview
+                this.$axios.get(`/api/thesis/preview/${fileDownloadUri}`)
+                    .then(response => {
+                        this.previewContent = response.data;
+                    })
+                    .catch(error => {
+                        console.error('Error loading preview:', error);
+                    });
             }
         }
     }

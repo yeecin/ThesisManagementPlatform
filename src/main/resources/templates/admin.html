@@ -256,7 +256,9 @@
             <el-icon><icon-menu></icon-menu></el-icon>轮播图
           </el-menu-item>
           <el-menu-item index="3">
-            <el-icon><setting></setting></el-icon>公告信息管理
+            <router-link to="/admin/announcementManagement" class="no-underline">
+              <el-icon><setting></setting></el-icon>公告信息管理
+            </router-link>
           </el-menu-item>
           <el-sub-menu index="4">
             <template #title>
@@ -472,11 +474,76 @@
     </div>
   `,
   }
+  const AnnouncementManagementPage = {
+    setup() {
+      const form = Vue.ref({
+        title: '',
+        content: ''
+      })
+      const announcements = Vue.ref([])
+
+      const fetchAnnouncements = async () => {
+        const response = await fetch('/admin/getAnnouncements')
+        announcements.value = await response.json()
+      }
+
+      const selectAnnouncement = (announcement) => {
+        form.value.title = announcement.title
+        form.value.content = announcement.content
+      }
+
+      const submitAnnouncement = async () => {
+        await fetch('/admin/updateAnnouncement', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(form.value),
+        })
+        // After updating the announcement, fetch the list again
+        await fetchAnnouncements()
+      }
+
+      // Fetch the list of announcements when the component is created
+      fetchAnnouncements()
+
+      return {
+        form,
+        announcements,
+        selectAnnouncement,
+        submitAnnouncement,
+      }
+    },
+    template: `
+      <div>
+        <el-row v-for="announcement in announcements" @click="selectAnnouncement(announcement)" :key="announcement.id">
+          <el-col :span="24">
+            <el-card>
+              <h2>{{ announcement.title }}</h2>
+              <p>{{ announcement.content }}</p>
+            </el-card>
+          </el-col>
+        </el-row>
+        <el-form :model="form" label-width="120px">
+          <el-form-item label="公告标题">
+            <el-input v-model="form.title"></el-input>
+          </el-form-item>
+          <el-form-item label="公告内容">
+            <el-input type="textarea" v-model="form.content" :rows="10"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submitAnnouncement">提交公告</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    `,
+  }
   const loadThesisTitlesPage = { template: '<h1>论文题目</h1>' }
   const routes = [
     { path: '/admin/loadStudentManagement', component: loadStudentManagementPage },
     { path: '/admin/loadTeacherManagement', component: loadTeacherManagementPage },
     { path: '/admin/loadThesisTitles', component: loadThesisTitlesPage },
+    { path: '/admin/announcementManagement', component: AnnouncementManagementPage },
   ]
   const router = VueRouter.createRouter({
     history: VueRouter.createWebHashHistory(),
