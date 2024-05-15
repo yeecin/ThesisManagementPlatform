@@ -222,9 +222,8 @@
             <el-input v-model="searchInput" placeholder="搜索论文" class="search-input" @keyup.enter.native="searchThesis"></el-input>
             <el-table :data="thesisList" style="width: 100%">
                 <el-table-column prop="title" label="论文标题"></el-table-column>
-                <el-table-column prop="author" label="作者"></el-table-column>
-                <el-table-column prop="year" label="年份"></el-table-column>
-                <el-table-column prop="abstract" label="摘要"></el-table-column>
+                <el-table-column prop="teacher.teacherName" label="作者"></el-table-column>
+                <el-table-column prop="content" label="摘要"></el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
                         <el-button @click="viewThesis(scope.row.id)">查看详情</el-button>

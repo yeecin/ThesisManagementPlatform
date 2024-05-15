@@ -296,7 +296,7 @@
 <script>
   const loadStudentManagementPage = {
     setup(){
-      const mainContent = Vue.ref('')
+      const mainContent = Vue.ref([])
       const editingStudent = Vue.ref(null)
       const isDialogVisible = Vue.ref(false)
       const editStudent = (row) => {
