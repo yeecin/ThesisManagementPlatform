@@ -176,7 +176,63 @@
         }
     }
 
-    const ThesisTopicPage = { template: '<div>这是论文题目页面</div>' }
+    const ThesisTopicPage = {
+        setup(){
+            const searchInput = Vue.ref(''); // 存储搜索输入
+            const thesisList = Vue.ref([]); // 存储论文列表
+
+            const searchThesis = () => {
+                // 发送请求到服务器，搜索论文
+                axios.get('/searchThesis', {
+                    params: {
+                        keyword: searchInput.value
+                    }
+                })
+                    .then(response => {
+                        thesisList.value = response.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            };
+
+            const fetchThesisList = () => {
+                // 发送请求到服务器，获取论文列表
+                axios.get('/getThesisList')
+                    .then(response => {
+                        thesisList.value = response.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            };
+
+            // 在组件创建时，获取论文列表
+            fetchThesisList();
+
+            return {
+                searchInput,
+                thesisList,
+                searchThesis
+            };
+        },
+        template: `
+        <div>
+            <h2>论文列表</h2>
+            <el-input v-model="searchInput" placeholder="搜索论文" class="search-input" @keyup.enter.native="searchThesis"></el-input>
+            <el-table :data="thesisList" style="width: 100%">
+                <el-table-column prop="title" label="论文标题"></el-table-column>
+                <el-table-column prop="author" label="作者"></el-table-column>
+                <el-table-column prop="year" label="年份"></el-table-column>
+                <el-table-column prop="abstract" label="摘要"></el-table-column>
+                <el-table-column label="操作">
+                    <template #default="scope">
+                        <el-button @click="viewThesis(scope.row.id)">查看详情</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+    ` }
     const PersonalPage = {
         template: `
           <div>
