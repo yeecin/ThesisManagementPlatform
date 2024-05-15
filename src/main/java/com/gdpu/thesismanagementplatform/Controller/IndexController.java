@@ -2,6 +2,7 @@ package com.gdpu.thesismanagementplatform.Controller;
 
 import com.gdpu.thesismanagementplatform.pojo.Announcement;
 import com.gdpu.thesismanagementplatform.pojo.Image;
+import com.gdpu.thesismanagementplatform.pojo.Thesis;
 import com.gdpu.thesismanagementplatform.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,5 +52,10 @@ public class IndexController {
     public void getHomePageData() {
         getImages();
         getAnnouncements();
+    }
+    @GetMapping("/getThesisList")
+    @ResponseBody
+    public List<Thesis> getThesisList() {
+        return thesisRepository.findAll();
     }
 }
