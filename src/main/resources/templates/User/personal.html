@@ -1,28 +1,49 @@
-<!-- personal.html -->
-<template>
-    <div>
-        <h1>个人资料</h1>
-        <p>在这里，你可以编辑你的个人资料并保存。</p>
-        <el-form ref="form" :model="form" label-width="120px" class="centered-form">
-            <el-form-item label="姓名">
-                <el-input v-model="form.studentName"></el-input>
-            </el-form-item>
-            <el-form-item label="邮箱">
-                <el-input v-model="form.email"></el-input>
-            </el-form-item>
-            <el-form-item label="电话">
-                <el-input v-model="form.phone"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="onSubmit">保存设置</el-button>
-                <el-button type="primary" @click="back">返回</el-button>
-            </el-form-item>
-        </el-form>
-    </div>
-</template>
-
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>个人资料</title>
+    <link rel="stylesheet" href="/css/default/element-plus.dist.index.css">
+    <style>
+        .centered-form {
+            width: 50%;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        p {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <h1>个人资料</h1>
+    <p>在这里，你可以编辑你的个人资料并保存。</p>
+    <el-form ref="form" :model="form" label-width="120px" class="centered-form">
+        <el-form-item label="姓名">
+            <el-input v-model="form.studentName"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+            <el-input v-model="form.email"></el-input>
+        </el-form-item>
+        <el-form-item label="电话">
+            <el-input v-model="form.phone"></el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="onSubmit">保存设置</el-button>
+            <el-button type="primary" @click="back">返回</el-button>
+        </el-form-item>
+    </el-form>
+</div>
+<!-- Import Vue 3 -->
+<script src="/js/vue.global.js"></script>
+<!-- Import component library -->
+<script src="/js/index.full.js"></script>
+<script src="/js/axios.min.js"></script>
 <script>
-    export default {
+    const app = Vue.createApp({
         data() {
             return {
                 form: {
@@ -69,5 +90,9 @@
             // 在实例创建后获取个人资料
             this.fetchProfile();
         }
-    }
+    })
+    app.use(ElementPlus)
+    app.mount('#app')
 </script>
+</body>
+</html>
