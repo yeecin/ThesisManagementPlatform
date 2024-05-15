@@ -18,13 +18,10 @@ public class Thesis {
     private String title;
 
     @ManyToOne
-    @JoinColumn(name="student_id", nullable = false)
-    private Student student;
-
-    @ManyToOne
     @JoinColumn(name="teacher_id", nullable = false)
     private Teacher teacher;
 
     private String content;
+
     private String status;
 }
