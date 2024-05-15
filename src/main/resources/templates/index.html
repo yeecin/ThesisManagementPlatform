@@ -145,18 +145,15 @@
                             <router-link to="/announcement" class="no-underline">公告信息</router-link>
                         </el-menu-item>
                         <el-menu-item index="3">
-                            <router-link to="/thesis-topic">论文题目</router-link>
+                            <router-link to="/thesis-topic" class="no-underline">论文题目</router-link>
                         </el-menu-item>
                         <el-menu-item index="4">
                             <el-link v-if="!username" href="./login" type="primary" underline>登录</el-link>
                             <span v-else>当前用户：{{ username }}</span>
                         </el-menu-item>
                         <el-menu-item index="5">
-                            <el-link v-if="!username" href="./User/Register" type="primary" underline>注册</el-link>
-                        </el-menu-item>
-                        <el-menu-item index="6">
                             <el-link v-if="username" type="primary" underline>
-                                <router-link to="/personal">用户资料</router-link>
+                                <router-link to="/User/personal" class="no-underline">用户资料</router-link>
                             </el-link>
                         </el-menu-item>
                     </el-menu>
@@ -168,31 +165,36 @@
         </el-header>
         <el-main>
             <router-view></router-view>
-<!--            <el-container>-->
-<!--                <el-main>-->
-<!--                    <div class="mainBanner">-->
-<!--                        <div class="mainBannerLeft">-->
-<!--                            <img id="school_logo" class="schoolLogo" style="display:none;" src="" alt="">-->
-<!--                            <span id="school_name" style="display:none;" class="schoolName"></span>-->
-<!--                            <span id="xtmc" style="" class="systemName">大学生毕业论文（设计）管理系统</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </el-main>-->
-<!--            </el-container>-->
         </el-main>
     </el-container>
 </div>
 <script src="/js/axios.min.js"></script>
-<script>
+<script type="module">
+
     const HomePage = { template: '<div>这是首页</div>' }
     const AnnouncementPage = { template: '<div>这是公告信息页面</div>' }
     const ThesisTopicPage = { template: '<div>这是论文题目页面</div>' }
-    const PersonalPage = { template: '<div>这是个人资料页面</div>' }
+
+    const PersonalPage = {
+        data() {
+            return {
+                content: ''
+            }
+        },
+        created() {
+            axios.get('/User/personal')
+                .then(response => {
+                    this.content = response.data;
+                    console.log(response.data);
+                });
+        },
+        template: '<div v-html="content"></div>'
+    }
     const routes = [
         { path: '/', component: HomePage },
         { path: '/announcement', component: AnnouncementPage },
         { path: '/thesis-topic', component: ThesisTopicPage },
-        { path: '/personal', component: PersonalPage}
+        { path: '/User/personal', component: PersonalPage}
     ]
 
     const app = Vue.createApp({

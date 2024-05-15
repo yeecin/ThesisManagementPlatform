@@ -1,0 +1,73 @@
+<!-- personal.html -->
+<template>
+  <div>
+    <h1>个人资料</h1>
+    <p>在这里，你可以编辑你的个人资料并保存。</p>
+    <el-form ref="form" :model="form" label-width="120px" class="centered-form">
+      <el-form-item label="姓名">
+        <el-input v-model="form.studentName"></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱">
+        <el-input v-model="form.email"></el-input>
+      </el-form-item>
+      <el-form-item label="电话">
+        <el-input v-model="form.phone"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">保存设置</el-button>
+        <el-button type="primary" @click="back">返回</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      form: {
+        studentName: '',
+        email: '',
+        phone: ''
+      }
+    }
+  },
+  methods: {
+    onSubmit() {
+      // 验证姓名不能为空
+      if (!this.form.studentName) {
+        alert('姓名不能为空');
+        return;
+      }
+      // 发送请求到服务器，保存用户的设置
+      axios.post('/User/UpdateProfile', this.form)
+          .then(response => {
+            alert(response.data);
+            console.log(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    },
+    back() {
+      window.location.href = '/';
+    },
+    fetchProfile() {
+      // 发送请求到服务器，获取用户的个人资料
+      axios.get('/User/GetProfile')
+          .then(response => {
+            this.form.studentName = response.data.studentName;
+            this.form.email = response.data.email
+            this.form.phone = response.data.phone;
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    }
+  },
+  created() {
+    // 在实例创建后获取个人资料
+    this.fetchProfile();
+  }
+}
+</script>

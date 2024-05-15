@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -29,9 +30,15 @@ public class DemoController {
     public String login() {
         return "login";
     }
+//    @RequestMapping("/User/personal")
+//    public String personal() {
+//        return "User/personal";
+//    }
     @RequestMapping("/User/personal")
-    public String personal() {
-        return "User/personal";
+    public ModelAndView personal() {
+        ModelAndView modelAndView = new ModelAndView("User/personal");
+        // Add any model attributes if needed
+        return modelAndView;
     }
     @RequestMapping("/User/privacy")
     public String privacy() {
