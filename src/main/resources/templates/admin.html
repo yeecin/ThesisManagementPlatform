@@ -276,7 +276,7 @@
               <el-icon><setting></setting></el-icon>模块管理
             </template>
             <el-menu-item index="5-1">
-                <router-link to="/admin/loadThesisTitles" class="no-underline">论文题目</router-link>
+                <router-link to="/admin/loadThesisChoicesPage" class="no-underline">论文题目</router-link>
             </el-menu-item>
             <el-menu-item index="5-2">论文文档</el-menu-item>
             <el-menu-item index="5-3">论文指导</el-menu-item>
@@ -536,11 +536,36 @@
       </div>
     `,
   }
-  const loadThesisTitlesPage = { template: '<h1>论文题目</h1>' }
+  const loadThesisChoicesPage = {
+    setup() {
+      const thesisChoices = Vue.ref([])
+
+      const fetchThesisChoices = async () => {
+        const response = await fetch('/admin/getThesisChoices') // 替换为你的API路径
+        thesisChoices.value = await response.json()
+      }
+
+      fetchThesisChoices()
+
+      return {
+        thesisChoices
+      }
+    },
+    template: `
+    <div>
+      <el-table :data="thesisChoices" style="width: 100%">
+        <el-table-column prop="student.studentName" label="学生" width="180"></el-table-column>
+        <el-table-column prop="teacher.teacherName" label="教师" width="180"></el-table-column>
+        <el-table-column prop="thesis.title" label="论文标题" width="180"></el-table-column>
+        <el-table-column prop="status" label="论文状态" width="180"></el-table-column>
+      </el-table>
+    </div>
+  `,
+  }
   const routes = [
     { path: '/admin/loadStudentManagement', component: loadStudentManagementPage },
     { path: '/admin/loadTeacherManagement', component: loadTeacherManagementPage },
-    { path: '/admin/loadThesisTitles', component: loadThesisTitlesPage },
+    { path: '/admin/loadThesisChoicesPage', component: loadThesisChoicesPage },
     { path: '/admin/announcementManagement', component: AnnouncementManagementPage },
   ]
   const router = VueRouter.createRouter({

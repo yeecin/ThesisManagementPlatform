@@ -1,13 +1,7 @@
 package com.gdpu.thesismanagementplatform.Controller;
 
-import com.gdpu.thesismanagementplatform.pojo.Announcement;
-import com.gdpu.thesismanagementplatform.pojo.Student;
-import com.gdpu.thesismanagementplatform.pojo.Teacher;
-import com.gdpu.thesismanagementplatform.pojo.Thesis;
-import com.gdpu.thesismanagementplatform.repository.AnnouncementRepository;
-import com.gdpu.thesismanagementplatform.repository.StudentRepository;
-import com.gdpu.thesismanagementplatform.repository.TeacherRepository;
-import com.gdpu.thesismanagementplatform.repository.ThesisRepository;
+import com.gdpu.thesismanagementplatform.pojo.*;
+import com.gdpu.thesismanagementplatform.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -26,6 +20,8 @@ public class AdminController {
     private ThesisRepository thesisRepository;
     @Autowired
     private AnnouncementRepository announcementRepository;
+    @Autowired
+    private ThesisChoiceRepository thesisChoiceRepository;
 
     @RequestMapping("/getStudents")
     @ResponseBody
@@ -78,5 +74,15 @@ public class AdminController {
     @ResponseBody
     public Announcement updateAnnouncement(@RequestBody Announcement announcement) {
         return announcementRepository.save(announcement);
+    }
+    @GetMapping("/getThesisChoices")
+    @ResponseBody
+    public List<ThesisChoice> getThesisChoices() {
+        return thesisChoiceRepository.findAll();
+    }
+    @PutMapping("/updateThesisChoice")
+    @ResponseBody
+    public ThesisChoice updateThesisChoice(@RequestBody ThesisChoice thesisChoice) {
+        return thesisChoiceRepository.save(thesisChoice);
     }
 }
