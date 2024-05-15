@@ -47,100 +47,107 @@
 </div>
 <script src="/js/axios.min.js"></script>
 <script>
-    const HomePage = { template: '<div>这是首页</div>' }
-    const AnnouncementPage = { template: '<div>这是公告信息页面</div>' }
-    const PersonalPage = {
-        template: `
-          <div>
-            <h1 style="text-align: center;">个人资料</h1>
-            <el-form ref="form" :model="form" label-width="120px" class="centered-form">
-              <el-form-item label="姓名">
-                <el-input v-model="form.teacherName"></el-input>
-              </el-form-item>
-              <el-form-item label="邮箱">
-                <el-input v-model="form.email"></el-input>
-              </el-form-item>
-              <el-form-item label="电话">
-                <el-input v-model="form.phone"></el-input>
-              </el-form-item>
-            </el-form>
-          </div>
-        `,
-        data() {
-            return {
-                form: {
-                    teacherName: '',
-                    email: '',
-                    phone: ''
-                }
-            }
-        },
-        methods: {
-            back() {
-                this.$router.push('/')
-            },
-            fetchProfile() {
-                // 发送请求到服务器，获取用户的个人资料
-                axios.get('/Teacher/GetProfile')
+    const HomePage = {
+        setup() {
+            const images = Vue.ref([
+                { id: 1, url: 'https://www.gdpu.edu.cn/tp/2023ztjy.jpg' },
+                { id: 2, url: 'https://www.gdpu.edu.cn/tp/yaoyixietong.jpg' },
+                { id: 3, url: 'https://www.gdpu.edu.cn/tp/xishuihu.jpg' }
+            ]);
+            const announcements = Vue.ref([
+            ]);
+
+            const fetchProfile = () => {
+                // 发送请求到服务器，获取轮播图和公告信息
+                axios.get('/getImages')
                     .then(response => {
-                        this.form.teacherName = response.data.teacherName;
-                        this.form.email = response.data.email
-                        this.form.phone = response.data.phone;
+                        // images.value = response.data;
+                        //添加获取的图片到images数组
+                        for (let i = 0; i < response.data.length; i++) {
+                            images.value.push(response.data[i]);
+                        }
                     })
                     .catch(error => {
                         console.log(error);
                     });
-            }
-        },
-        created() {
-            this.fetchProfile()
-        }
-    }
-    const StudentThesisPage = {
-        template: `
-        <div class="centered-content">
-            <el-table :data="thesisList" style="width: 100%">
-                <el-table-column prop="teacher.teacherId" label="教师编号"></el-table-column>
-                <el-table-column prop="student.studentId" label="学生学号"></el-table-column>
-                <el-table-column prop="thesisId" label="论文编号"></el-table-column>
-                <el-table-column prop="title" label="论文题目"></el-table-column>
-                <el-table-column
-                    label="操作"
-                    width="120">
-                    <template #default="scope">
-                        <el-button @click="reviewThesis(scope.row)" type="primary" size="small">审核</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
-    `,
-        data() {
-            return {
-                thesisList: [] // 你需要从后端获取学生的毕业论文列表
-            }
-        },
-        methods: {
-            reviewThesis(thesis) {
-                // 这里实现审核论文的逻辑
-            },
-            fetchThesisList() {
-                // 发送GET请求到后端的/api/thesis/list接口
-                axios.get('/api/thesis/getThesis', {
-                    // params: 1
-                })
+                axios.get('/getAnnouncements')
                     .then(response => {
-                        // 将返回的数据赋值给thesisList
-                        this.thesisList = response.data;
+                        // announcements.value = response.data;
+                        //添加获取的公告信息到announcements数组
+                        for (let i = 0; i < response.data.length; i++) {
+                            announcements.value.push(response.data[i]);
+                        }
                     })
                     .catch(error => {
-                        console.error(error);
+                        console.log(error);
                     });
-            }
+            };
+
+            // 在 setup 函数中调用 fetchProfile
+            fetchProfile();
+
+            return {
+                images,
+                announcements
+            };
         },
-        created() {
-            this.fetchThesisList();
+        template: `
+        <div>
+          <el-carousel height="300px">
+            <el-carousel-item v-for="image in images" :key="image.id">
+              <img :src="image.url" :alt="'Image ' + image.id">
+            </el-carousel-item>
+          </el-carousel>
+            <el-divider></el-divider>
+            <h2>公告信息</h2>
+            <el-card class="box-card" v-for="announcement in announcements" :key="announcement.id">
+                <div slot="header" class="clearfix">
+                    <span>{{ announcement.title }}</span>
+                </div>
+                <div>{{ announcement.content }}</div>
+            </el-card>
+        </div>
+    `
+    }
+    const AnnouncementPage = {
+        template: `
+          <div>
+            <h2>公告信息</h2>
+            <el-card class="box-card" v-for="announcement in announcements" :key="announcement.id">
+              <div slot="header" class="clearfix">
+                <span>{{ announcement.title }}</span>
+              </div>
+              <div>{{ announcement.content }}</div>
+            </el-card>
+          </div>
+    `,
+        setup() {
+            const announcements = Vue.ref([
+            ]);
+
+            const fetchProfile = () => {
+                axios.get('/getAnnouncements')
+                    .then(response => {
+                        // announcements.value = response.data;
+                        //添加获取的公告信息到announcements数组
+                        for (let i = 0; i < response.data.length; i++) {
+                            announcements.value.push(response.data[i]);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            };
+
+            // 在 setup 函数中调用 fetchProfile
+            fetchProfile();
+            return {
+                announcements
+            };
         }
     }
+    const StudentThesisPage = { template: '<div>这是学生毕业论文页面</div>' }
+
     const routes = [
         { path: '/', component: HomePage },
         { path: '/announcement', component: AnnouncementPage },
