@@ -1,14 +1,18 @@
 package com.gdpu.thesismanagementplatform.Controller;
 
+import com.gdpu.thesismanagementplatform.pojo.Announcement;
 import com.gdpu.thesismanagementplatform.pojo.Student;
 import com.gdpu.thesismanagementplatform.pojo.Teacher;
 import com.gdpu.thesismanagementplatform.pojo.Thesis;
+import com.gdpu.thesismanagementplatform.repository.AnnouncementRepository;
 import com.gdpu.thesismanagementplatform.repository.StudentRepository;
 import com.gdpu.thesismanagementplatform.repository.TeacherRepository;
 import com.gdpu.thesismanagementplatform.repository.ThesisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -23,6 +27,8 @@ public class AdminController {
     private StudentRepository studentRepository;
     @Autowired
     private ThesisRepository thesisRepository;
+    @Autowired
+    private AnnouncementRepository announcementRepository;
 
     @RequestMapping("/getStudents")
     @ResponseBody
@@ -56,5 +62,9 @@ public class AdminController {
         student.setStudentName(studentName);
         student.setPassword(studentPassword);
         return studentRepository.save(student);
+    }
+    @PostMapping("/postAnnouncement")
+    public Announcement postAnnouncement(@RequestBody Announcement announcement) {
+        return announcementRepository.save(announcement);
     }
 }
