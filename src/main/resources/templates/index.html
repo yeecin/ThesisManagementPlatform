@@ -139,25 +139,27 @@
             <el-row>
                 <el-col :span="18">
                     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                        <el-menu-item index="1"  type="primary" underline>
+                        <el-menu-item index="1">
                             <router-link to="/" class="no-underline">首页</router-link>
                         </el-menu-item>
-                        <el-menu-item index="2" type="primary" underline>
+                        <el-menu-item index="2">
                             <router-link to="/announcement" class="no-underline">公告信息</router-link>
                         </el-menu-item>
                         <el-menu-item index="3">
-                            <router-link to="/thesis-topic">论文题目</router-link>
+                            <router-link to="/thesis-topic" class="no-underline">论文题目</router-link>
                         </el-menu-item>
-                        <el-menu-item index="4">
-                            <el-link v-if="!username" href="./login" type="primary" underline>登录</el-link>
-                            <span v-else>当前用户：{{ username }}</span>
+                        <el-menu-item index="4" type="primary">
+                            <el-link v-if="!username" href="./login">登录</el-link>
+                            <el-link v-else href="./login">当前用户：{{ username }}</el-link>
                         </el-menu-item>
                         <el-menu-item index="5">
-                            <el-link v-if="!username" href="./User/Register" type="primary" underline>注册</el-link>
+                            <el-link v-if="username">
+                                <router-link to="/personal" class="no-underline">用户资料</router-link>
+                            </el-link>
                         </el-menu-item>
                         <el-menu-item index="6">
-                            <el-link v-if="username" type="primary" underline>
-                                <router-link to="/personal">用户资料</router-link>
+                            <el-link v-if="username">
+                                <router-link to="/uploadThesis" class="no-underline">论文上传</router-link>
                             </el-link>
                         </el-menu-item>
                     </el-menu>
@@ -186,7 +188,101 @@
 </div>
 <script src="/js/axios.min.js"></script>
 <script>
+    // const HomePage = {
+    //     template: `
+    //     <div>
+    //       <el-carousel height="300px">
+    //         <el-carousel-item v-for="image in images" :key="image.id">
+    //           <img :src="image.url" :alt="'Image ' + image.id">
+    //         </el-carousel-item>
+    //       </el-carousel>
+    //         <el-divider></el-divider>
+    //         <h2>公告信息</h2>
+    //         <el-card class="box-card" v-for="announcement in announcements" :key="announcement.id">
+    //             <div slot="header" class="clearfix">
+    //                 <span>{{ announcement.title }}</span>
+    //             </div>
+    //             <div>{{ announcement.content }}</div>
+    //         </el-card>
+    //     </div>
+    // `,
+    //     data() {
+    //         return {
+    //             images: [
+    //                 { id: 1, url: 'https://www.gdpu.edu.cn/tp/2023ztjy.jpg' },
+    //                 { id: 2, url: 'https://www.gdpu.edu.cn/tp/yaoyixietong.jpg' },
+    //                 { id: 3, url: 'https://www.gdpu.edu.cn/tp/xishuihu.jpg' }
+    //             ],
+    //             announcements: [
+    //                 { id: 1, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：' },
+    //                 { id: 2, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：' },
+    //                 { id: 3, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：' }
+    //             ]
+    //         }
+    //     },
+    //     fetchProfile() {
+    //         // 发送请求到服务器，获取轮播图和公告信息
+    //         axios.get('/getHomePageData')
+    //             .then(response => {
+    //                 this.images = response.data;
+    //                 this.announcements = response.data;
+    //
+    //             })
+    //             .catch(error => {
+    //                 console.log(error);
+    //             });
+    //     },
+    //     created() {
+    //         this.fetchProfile()
+    //     }
+    // }
     const HomePage = {
+        setup() {
+            const images = Vue.ref([
+                { id: 1, url: 'https://www.gdpu.edu.cn/tp/2023ztjy.jpg' },
+                { id: 2, url: 'https://www.gdpu.edu.cn/tp/yaoyixietong.jpg' },
+                { id: 3, url: 'https://www.gdpu.edu.cn/tp/xishuihu.jpg' }
+            ]);
+            const announcements = Vue.ref([
+                { id: 1, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：' },
+                { id: 2, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：' },
+                { id: 3, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：'}
+            ]);
+
+            const fetchProfile = () => {
+                // 发送请求到服务器，获取轮播图和公告信息
+                axios.get('/getImages')
+                    .then(response => {
+                        // images.value = response.data;
+                        //添加获取的图片到images数组
+                        for (let i = 0; i < response.data.length; i++) {
+                            images.value.push(response.data[i]);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                axios.get('/getAnnouncements')
+                    .then(response => {
+                        // announcements.value = response.data;
+                        //添加获取的公告信息到announcements数组
+                        for (let i = 0; i < response.data.length; i++) {
+                            announcements.value.push(response.data[i]);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            };
+
+            // 在 setup 函数中调用 fetchProfile
+            fetchProfile();
+
+            return {
+                images,
+                announcements
+            };
+        },
         template: `
         <div>
           <el-carousel height="300px">
@@ -203,39 +299,67 @@
                 <div>{{ announcement.content }}</div>
             </el-card>
         </div>
+    `
+    }
+    const AnnouncementPage = {
+        template: `
+          <div>
+            <h2>公告信息</h2>
+            <el-card class="box-card" v-for="announcement in announcements" :key="announcement.id">
+              <div slot="header" class="clearfix">
+                <span>{{ announcement.title }}</span>
+              </div>
+              <div>{{ announcement.content }}</div>
+            </el-card>
+          </div>
     `,
-        data() {
+        setup() {
+            const announcements = Vue.ref([
+                {
+                    id: 1,
+                    title: '关于2021年毕业设计（论文）工作的通知',
+                    content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：'
+                },
+                {
+                    id: 2,
+                    title: '关于2021年毕业设计（论文）工作的通知',
+                    content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：'
+                },
+                {
+                    id: 3,
+                    title: '关于2021年毕业设计（论文）工作的通知',
+                    content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：'
+                }
+            ]);
+
+            const fetchProfile = () => {
+                axios.get('/getAnnouncements')
+                    .then(response => {
+                        // announcements.value = response.data;
+                        //添加获取的公告信息到announcements数组
+                        for (let i = 0; i < response.data.length; i++) {
+                            announcements.value.push(response.data[i]);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            };
+
+            // 在 setup 函数中调用 fetchProfile
+            fetchProfile();
             return {
-                images: [
-                    { id: 1, url: 'https://www.gdpu.edu.cn/tp/2023ztjy.jpg' },
-                    { id: 2, url: 'https://www.gdpu.edu.cn/tp/yaoyixietong.jpg' },
-                    { id: 3, url: 'https://www.gdpu.edu.cn/tp/xishuihu.jpg' }
-                ],
-                announcements: [
-                    { id: 1, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：' },
-                    { id: 2, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：' },
-                    { id: 3, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：' }
-                ]
-            }
-        },
-        created() {
-            axios.get('/getImages')
-                .then(response => {
-                    this.images = response.data
-                })
-            axios.get('/getAnnouncements')
-                .then(response => {
-                    this.announcements = response.data
-                })
+                announcements
+            };
         }
     }
-    const AnnouncementPage = { template: '<div>这是公告信息页面</div>' }
+
     const ThesisTopicPage = { template: '<div>这是论文题目页面</div>' }
     const PersonalPage = {
         template: `
           <div>
-            <h1>个人资料</h1>
-            <p>在这里，你可以编辑你的个人资料并保存。</p>
+            <h1 style="text-align: center;">个人资料</h1>
+            <p style="text-align: center;">在这里，你可以编辑你的个人资料并保存。</p>
             <el-form ref="form" :model="form" label-width="120px" class="centered-form">
               <el-form-item label="姓名">
                 <el-input v-model="form.studentName"></el-input>
@@ -295,12 +419,69 @@
             this.fetchProfile()
         }
     }
+    const UploadPage = {
+        template: `
+          <el-upload
+              v-model:file-list="fileList"
+              class="upload-demo"
+              multiple
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :before-remove="beforeRemove"
+              :before-upload="beforeUpload"
+              :limit="3"
+              :on-exceed="handleExceed"
+          >
+            <el-button type="primary">点击上传论文</el-button>
+          </el-upload>
+        `,
+        data() {
+            return {
+                fileList: [
+                ]
+            }
+        },
+        methods: {
+            handleRemove(file, uploadFiles) {
+                console.log(file, uploadFiles)
+            },
+            handlePreview(uploadFile) {
+                console.log(uploadFile)
+            },
+            handleExceed(files, uploadFiles) {
+                this.$message.warning(
+                    `The limit is 3, you selected ${files.length} files this time, add up to ${
+                        files.length + uploadFiles.length
+                    } totally`
+                )
+            },
+            beforeRemove(uploadFile, uploadFiles) {
+                return this.$confirm(
+                    `Cancel the transfer of ${uploadFile.name} ?`
+                ).then(
+                    () => true,
+                    () => false
+                )
+            },
+            beforeUpload(file) {
+                const isDoc = file.type === 'application/msword';
+                const isDocx = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                const isPdf = file.type === 'application/pdf';
+                if (!isDoc && !isDocx && !isPdf) {
+                    this.$message.error('上传论文只能是 doc/docx/pdf 格式!');
+                    return false;
+                }
+                return true;
+            }
+        }
+    }
 
     const routes = [
         { path: '/', component: HomePage },
         { path: '/announcement', component: AnnouncementPage },
         { path: '/thesis-topic', component: ThesisTopicPage },
-        { path: '/personal', component: PersonalPage}
+        { path: '/personal', component: PersonalPage},
+        { path: '/uploadThesis', component: UploadPage}
     ]
 
     const app = Vue.createApp({

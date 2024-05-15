@@ -54,8 +54,53 @@
 <script>
     const HomePage = { template: '<div>这是首页</div>' }
     const AnnouncementPage = { template: '<div>这是公告信息页面</div>' }
-    const StudentThesisPage = { template: '<div>这是学生毕业论文页面</div>' }
     const PersonalPage = { template: '<div>这是个人资料页面</div>' }
+    const StudentThesisPage = {
+        template: `
+        <div class="centered-content">
+            <el-table :data="thesisList" style="width: 100%">
+                <el-table-column prop="studentName" label="学生姓名"></el-table-column>
+                <el-table-column prop="thesisTitle" label="论文题目"></el-table-column>
+                <el-table-column prop="thesisAbstract" label="论文摘要"></el-table-column>
+                <el-table-column
+                    label="操作"
+                    width="120">
+                    <template #default="scope">
+                        <el-button @click="reviewThesis(scope.row)" type="primary" size="small">审核</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+    `,
+        data() {
+            return {
+                thesisList: [] // 你需要从后端获取学生的毕业论文列表
+            }
+        },
+        methods: {
+            reviewThesis(thesis) {
+                // 这里你需要实现审核论文的逻辑
+            },
+            fetchThesisList() {
+                // 发送GET请求到后端的/api/thesis/list接口
+                axios.get('/api/thesis/list', {
+                    params: {
+                        teacherId: 1 // 这里应该是当前登录的教师的ID
+                    }
+                })
+                    .then(response => {
+                        // 将返回的数据赋值给thesisList
+                        this.thesisList = response.data;
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+        },
+        created() {
+            this.fetchThesisList();
+        }
+    }
     const routes = [
         { path: '/', component: HomePage },
         { path: '/announcement', component: AnnouncementPage },

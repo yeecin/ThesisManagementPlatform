@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -36,12 +37,19 @@ public class IndexController {
     }
     //从数据库中获取图片，传给前端
     @GetMapping("/getImages")
+    @ResponseBody
     public List<Image> getImages() {
         return imageRepository.findAll();
     }
-    //从数据库中获取公告，传给前端
+    //从数据库中获取公告，传给前端,通过response返回
     @GetMapping("/getAnnouncements")
+    @ResponseBody
     public List<Announcement> getAnnouncements() {
         return announcementRepository.findAll();
+    }
+    @GetMapping("/getHomePageData")
+    public void getHomePageData() {
+        getImages();
+        getAnnouncements();
     }
 }
