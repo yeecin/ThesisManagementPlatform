@@ -1,46 +1,68 @@
 package com.gdpu.thesismanagementplatform.Controller;
 
-import com.gdpu.thesismanagementplatform.exception.ResourceNotFoundException;
-import com.gdpu.thesismanagementplatform.pojo.Thesis;
-import com.gdpu.thesismanagementplatform.repository.ThesisRepository;
-import org.springframework.web.bind.annotation.*;
+/**
+ * @Author: CX
+ * @Description:
+ */
+import com.gdpu.thesismanagementplatform.Service.FileStorageService;
+import com.gdpu.thesismanagementplatform.pojo.UploadFileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.List;
-import java.util.Optional;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 @RestController
-    public class ThesisController {
+@RequestMapping("/api/thesis")
+public class ThesisController {
+    private final FileStorageService fileStorageService;
 
-        @Autowired
-        private ThesisRepository thesisRepository;
-
-        @GetMapping("/getThesisDetail/{id}")
-        public String getThesisDetail(@PathVariable Long id) {
-            // 从数据库中获取论文的详细信息
-            Optional<Thesis> thesis = thesisRepository.findById(id);
-
-            // 如果找到了论文，就返回论文的详细信息
-            // 否则，返回一个错误消息（你可能需要创建一个新的异常类来处理这种情况）
-            return thesis.map(Thesis::getStatus)
-                    .orElseThrow(() -> new ResourceNotFoundException("Thesis not found with id " + id));
-        }
-
-        @PostMapping("/createThesis")
-        public Thesis createThesis(@RequestBody Thesis newThesis) {
-            return thesisRepository.save(newThesis);
-        }
-
-        @GetMapping("/getThesis")
-        public List<Thesis> getThesisList() {
-            return thesisRepository.findAll();
-        }
-
-        @GetMapping("/searchThesis")
-        public List<Thesis> searchThesis(@RequestParam String keyword) {
-            // 这里需要实现你的搜索逻辑，以下是一个基本的示例
-            return thesisRepository.findByTitleContaining(keyword);
-        }
+    @Autowired
+    public ThesisController(FileStorageService fileStorageService) {
+        this.fileStorageService = fileStorageService;
     }
 
+    @PostMapping("/upload")
+    public ResponseEntity<UploadFileResponse> uploadFile(@RequestParam("file") MultipartFile file) {
+        String fileName = fileStorageService.storeFile(file);
 
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/thesis/download/")
+                .path(fileName)
+                .toUriString();
+
+        return ResponseEntity.ok(new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize()));
+    }
+
+    @GetMapping("/preview/{fileName:.+}")
+    public ResponseEntity<String> previewFile(@PathVariable String fileName) {
+        String htmlContent = fileStorageService.loadFileAsHtml(fileName);
+
+        return ResponseEntity.ok(htmlContent);
+    }
+
+    @GetMapping("/api/thesis/download/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
+        String uploadDir = "./src/main/resources/uploads";
+        // 加载文件路径
+        Path filePath = Paths.get(uploadDir).resolve(fileName).normalize();
+        Resource resource = new FileSystemResource(filePath);
+
+        // 设置响应头
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(resource);
+    }
+}

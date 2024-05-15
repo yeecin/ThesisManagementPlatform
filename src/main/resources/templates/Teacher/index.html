@@ -47,15 +47,111 @@
 </div>
 <script src="/js/axios.min.js"></script>
 <script>
-    const HomePage = { template: '<div>这是首页</div>' }
-    const AnnouncementPage = { template: '<div>这是公告信息页面</div>' }
+    const HomePage = {
+        setup() {
+            const images = Vue.ref([
+                { id: 1, url: 'https://www.gdpu.edu.cn/tp/2023ztjy.jpg' },
+                { id: 2, url: 'https://www.gdpu.edu.cn/tp/yaoyixietong.jpg' },
+                { id: 3, url: 'https://www.gdpu.edu.cn/tp/xishuihu.jpg' }
+            ]);
+            const announcements = Vue.ref([
+            ]);
+
+            const fetchProfile = () => {
+                // 发送请求到服务器，获取轮播图和公告信息
+                axios.get('/getImages')
+                    .then(response => {
+                        // images.value = response.data;
+                        //添加获取的图片到images数组
+                        for (let i = 0; i < response.data.length; i++) {
+                            images.value.push(response.data[i]);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                axios.get('/getAnnouncements')
+                    .then(response => {
+                        // announcements.value = response.data;
+                        //添加获取的公告信息到announcements数组
+                        for (let i = 0; i < response.data.length; i++) {
+                            announcements.value.push(response.data[i]);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            };
+
+            // 在 setup 函数中调用 fetchProfile
+            fetchProfile();
+
+            return {
+                images,
+                announcements
+            };
+        },
+        template: `
+        <div>
+          <el-carousel height="300px">
+            <el-carousel-item v-for="image in images" :key="image.id">
+              <img :src="image.url" :alt="'Image ' + image.id">
+            </el-carousel-item>
+          </el-carousel>
+            <el-divider></el-divider>
+            <h2>公告信息</h2>
+            <el-card class="box-card" v-for="announcement in announcements" :key="announcement.id">
+                <div slot="header" class="clearfix">
+                    <span>{{ announcement.title }}</span>
+                </div>
+                <div>{{ announcement.content }}</div>
+            </el-card>
+        </div>
+    `
+    }
+    const AnnouncementPage = {
+        template: `
+          <div>
+            <h2>公告信息</h2>
+            <el-card class="box-card" v-for="announcement in announcements" :key="announcement.id">
+              <div slot="header" class="clearfix">
+                <span>{{ announcement.title }}</span>
+              </div>
+              <div>{{ announcement.content }}</div>
+            </el-card>
+          </div>
+    `,
+        setup() {
+            const announcements = Vue.ref([
+            ]);
+
+            const fetchProfile = () => {
+                axios.get('/getAnnouncements')
+                    .then(response => {
+                        // announcements.value = response.data;
+                        //添加获取的公告信息到announcements数组
+                        for (let i = 0; i < response.data.length; i++) {
+                            announcements.value.push(response.data[i]);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            };
+
+            // 在 setup 函数中调用 fetchProfile
+            fetchProfile();
+            return {
+                announcements
+            };
+        }
+    }
     const StudentThesisPage = { template: '<div>这是学生毕业论文页面</div>' }
-    const PersonalPage = { template: '<div>这是个人资料页面</div>' }
+
     const routes = [
         { path: '/', component: HomePage },
         { path: '/announcement', component: AnnouncementPage },
         { path: '/studentThesis', component: StudentThesisPage },
-        { path: '/personal', component: PersonalPage}
     ]
 
     const app = Vue.createApp({

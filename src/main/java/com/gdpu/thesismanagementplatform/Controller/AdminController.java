@@ -1,16 +1,11 @@
 package com.gdpu.thesismanagementplatform.Controller;
 
-import com.gdpu.thesismanagementplatform.pojo.Student;
-import com.gdpu.thesismanagementplatform.pojo.Teacher;
-import com.gdpu.thesismanagementplatform.pojo.Thesis;
-import com.gdpu.thesismanagementplatform.repository.StudentRepository;
-import com.gdpu.thesismanagementplatform.repository.TeacherRepository;
-import com.gdpu.thesismanagementplatform.repository.ThesisRepository;
+import com.gdpu.thesismanagementplatform.pojo.*;
+import com.gdpu.thesismanagementplatform.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +18,10 @@ public class AdminController {
     private StudentRepository studentRepository;
     @Autowired
     private ThesisRepository thesisRepository;
+    @Autowired
+    private AnnouncementRepository announcementRepository;
+    @Autowired
+    private ThesisChoiceRepository thesisChoiceRepository;
 
     @RequestMapping("/getStudents")
     @ResponseBody
@@ -56,5 +55,34 @@ public class AdminController {
         student.setStudentName(studentName);
         student.setPassword(studentPassword);
         return studentRepository.save(student);
+    }
+    @PostMapping("/postAnnouncement")
+    public Announcement postAnnouncement(@RequestBody Announcement announcement) {
+        return announcementRepository.save(announcement);
+    }
+    @PostMapping("getCurrentAnnouncement")
+    @ResponseBody
+    public Announcement getCurrentAnnouncement() {
+        return announcementRepository.findTopByOrderByIdDesc();
+    }
+    @GetMapping("/getAnnouncements")
+    @ResponseBody
+    public List<Announcement> getAnnouncements() {
+        return announcementRepository.findAll();
+    }
+    @PutMapping("/updateAnnouncement")
+    @ResponseBody
+    public Announcement updateAnnouncement(@RequestBody Announcement announcement) {
+        return announcementRepository.save(announcement);
+    }
+    @GetMapping("/getThesisChoices")
+    @ResponseBody
+    public List<ThesisChoice> getThesisChoices() {
+        return thesisChoiceRepository.findAll();
+    }
+    @PutMapping("/updateThesisChoice")
+    @ResponseBody
+    public ThesisChoice updateThesisChoice(@RequestBody ThesisChoice thesisChoice) {
+        return thesisChoiceRepository.save(thesisChoice);
     }
 }

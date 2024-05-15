@@ -256,7 +256,9 @@
             <el-icon><icon-menu></icon-menu></el-icon>轮播图
           </el-menu-item>
           <el-menu-item index="3">
-            <el-icon><setting></setting></el-icon>公告信息管理
+            <router-link to="/admin/announcementManagement" class="no-underline">
+              <el-icon><setting></setting></el-icon>公告信息管理
+            </router-link>
           </el-menu-item>
           <el-sub-menu index="4">
             <template #title>
@@ -274,7 +276,7 @@
               <el-icon><setting></setting></el-icon>模块管理
             </template>
             <el-menu-item index="5-1">
-                <router-link to="/admin/loadThesisTitles" class="no-underline">论文题目</router-link>
+                <router-link to="/admin/loadThesisChoicesPage" class="no-underline">论文题目</router-link>
             </el-menu-item>
             <el-menu-item index="5-2">论文文档</el-menu-item>
             <el-menu-item index="5-3">论文指导</el-menu-item>
@@ -472,11 +474,99 @@
     </div>
   `,
   }
-  const loadThesisTitlesPage = { template: '<h1>论文题目</h1>' }
+  const AnnouncementManagementPage = {
+    setup() {
+      const form = Vue.ref({
+        title: '',
+        content: ''
+      })
+      const announcements = Vue.ref([])
+
+      const fetchAnnouncements = async () => {
+        const response = await fetch('/admin/getAnnouncements')
+        announcements.value = await response.json()
+      }
+
+      const selectAnnouncement = (announcement) => {
+        form.value.title = announcement.title
+        form.value.content = announcement.content
+      }
+
+      const submitAnnouncement = async () => {
+        await fetch('/admin/updateAnnouncement', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(form.value),
+        })
+        await fetchAnnouncements()
+      }
+
+      fetchAnnouncements()
+
+      return {
+        form,
+        announcements,
+        selectAnnouncement,
+        submitAnnouncement,
+      }
+    },
+    template: `
+      <div>
+        <el-row v-for="announcement in announcements" @click="selectAnnouncement(announcement)" :key="announcement.id">
+          <el-col :span="24">
+            <el-card>
+              <h2>{{ announcement.title }}</h2>
+              <p>{{ announcement.content }}</p>
+            </el-card>
+          </el-col>
+        </el-row>
+        <el-form :model="form" label-width="120px">
+          <el-form-item label="公告标题">
+            <el-input v-model="form.title"></el-input>
+          </el-form-item>
+          <el-form-item label="公告内容">
+            <el-input type="textarea" v-model="form.content" :rows="10"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submitAnnouncement">提交公告</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    `,
+  }
+  const loadThesisChoicesPage = {
+    setup() {
+      const thesisChoices = Vue.ref([])
+
+      const fetchThesisChoices = async () => {
+        const response = await fetch('/admin/getThesisChoices') // 替换为你的API路径
+        thesisChoices.value = await response.json()
+      }
+
+      fetchThesisChoices()
+
+      return {
+        thesisChoices
+      }
+    },
+    template: `
+    <div>
+      <el-table :data="thesisChoices" style="width: 100%">
+        <el-table-column prop="student.studentName" label="学生" width="180"></el-table-column>
+        <el-table-column prop="teacher.teacherName" label="教师" width="180"></el-table-column>
+        <el-table-column prop="thesis.title" label="论文标题" width="180"></el-table-column>
+        <el-table-column prop="status" label="论文状态" width="180"></el-table-column>
+      </el-table>
+    </div>
+  `,
+  }
   const routes = [
     { path: '/admin/loadStudentManagement', component: loadStudentManagementPage },
     { path: '/admin/loadTeacherManagement', component: loadTeacherManagementPage },
-    { path: '/admin/loadThesisTitles', component: loadThesisTitlesPage },
+    { path: '/admin/loadThesisChoicesPage', component: loadThesisChoicesPage },
+    { path: '/admin/announcementManagement', component: AnnouncementManagementPage },
   ]
   const router = VueRouter.createRouter({
     history: VueRouter.createWebHashHistory(),
