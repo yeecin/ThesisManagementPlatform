@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>论文管理平台</title>
@@ -180,7 +180,26 @@
         setup(){
             const searchInput = Vue.ref(''); // 存储搜索输入
             const thesisList = Vue.ref([]); // 存储论文列表
+            const dialogVisible = Vue.ref(false); // 控制对话框的显示和隐藏
+            const currentThesis = Vue.ref(null); // 存储当前论文的信息
 
+            const statusThesis = (thesis) => {
+                // 发送请求到服务器，获取论文详情
+                axios.get(`/getThesisDetail/${thesis.thesisId}`)
+                    .then(response => {
+                        // 将获取到的论文详情赋值给currentThesis
+                        currentThesis.value = response.data;
+                        // 显示弹窗
+                        dialogVisible.value = true;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            };
+            const viewThesis = (url) => {
+                // 直接跳转到数据库中的URL
+                window.location.href = url;
+            };
             const searchThesis = () => {
                 // 发送请求到服务器，搜索论文
                 axios.get('/searchThesis', {
@@ -213,24 +232,39 @@
             return {
                 searchInput,
                 thesisList,
-                searchThesis
+                searchThesis,
+                viewThesis,
+                statusThesis,
+                dialogVisible,
+                currentThesis
             };
         },
         template: `
-        <div>
+          <div>
             <h2>论文列表</h2>
             <el-input v-model="searchInput" placeholder="搜索论文" class="search-input" @keyup.enter.native="searchThesis"></el-input>
             <el-table :data="thesisList" style="width: 100%">
-                <el-table-column prop="title" label="论文标题"></el-table-column>
-                <el-table-column prop="teacher.teacherName" label="作者"></el-table-column>
-                <el-table-column prop="content" label="摘要"></el-table-column>
-                <el-table-column label="操作">
-                    <template #default="scope">
-                        <el-button @click="viewThesis(scope.row.id)">查看详情</el-button>
-                    </template>
-                </el-table-column>
+              <el-table-column prop="title" label="论文标题"></el-table-column>
+              <el-table-column prop="teacher.teacherName" label="作者"></el-table-column>
+              <el-table-column prop="content" label="摘要"></el-table-column>
+              <el-table-column label="连接">
+                <template #default="scope">
+                  <a :href="scope.row.url" target="_blank">{{scope.row.url}}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作">
+                <template #default="scope">
+                  <el-button @click="statusThesis(scope.row)">查看详情</el-button>
+                </template>
+              </el-table-column>
             </el-table>
-        </div>
+            <el-dialog :visible.sync="dialogVisible" width="30%">
+              <span>{{ currentThesis ? currentThesis.status : '' }}</span>
+              <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">确 定</el-button>
+          </span>
+            </el-dialog>
+          </div>
     ` }
     const PersonalPage = {
         template: `

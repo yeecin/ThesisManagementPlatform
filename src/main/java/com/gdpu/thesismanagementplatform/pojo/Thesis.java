@@ -22,5 +22,6 @@ public class Thesis {
     private Teacher teacher;
 
     private String content;
-
+    private String status;
+    private String url;
 }
