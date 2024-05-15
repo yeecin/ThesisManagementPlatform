@@ -49,7 +49,53 @@
 <script>
     const HomePage = { template: '<div>这是首页</div>' }
     const AnnouncementPage = { template: '<div>这是公告信息页面</div>' }
-    const PersonalPage = { template: '<div>这是个人资料页面</div>' }
+    const PersonalPage = {
+        template: `
+          <div>
+            <h1 style="text-align: center;">个人资料</h1>
+            <el-form ref="form" :model="form" label-width="120px" class="centered-form">
+              <el-form-item label="姓名">
+                <el-input v-model="form.teacherName"></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱">
+                <el-input v-model="form.email"></el-input>
+              </el-form-item>
+              <el-form-item label="电话">
+                <el-input v-model="form.phone"></el-input>
+              </el-form-item>
+            </el-form>
+          </div>
+        `,
+        data() {
+            return {
+                form: {
+                    teacherName: '',
+                    email: '',
+                    phone: ''
+                }
+            }
+        },
+        methods: {
+            back() {
+                this.$router.push('/')
+            },
+            fetchProfile() {
+                // 发送请求到服务器，获取用户的个人资料
+                axios.get('/Teacher/GetProfile')
+                    .then(response => {
+                        this.form.teacherName = response.data.teacherName;
+                        this.form.email = response.data.email
+                        this.form.phone = response.data.phone;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+        },
+        created() {
+            this.fetchProfile()
+        }
+    }
     const StudentThesisPage = {
         template: `
         <div class="centered-content">

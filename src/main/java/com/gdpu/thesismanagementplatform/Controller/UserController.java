@@ -183,4 +183,19 @@ public class UserController {
         // 如果找不到用户，返回null
         return null;
     }
+
+    @RequestMapping(value = "/Teacher/GetProfile", method = RequestMethod.GET)
+    @ResponseBody
+    public Teacher getTeacherProfile(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+
+        // 根据用户名查找用户
+        Teacher teacher = teacherRepository.findByTeacherName(username);
+        if (teacher != null) {
+            return teacher;
+        }
+        // 如果找不到用户，返回null
+        return null;
+    }
+
 }
