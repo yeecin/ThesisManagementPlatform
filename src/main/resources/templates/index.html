@@ -157,6 +157,11 @@
                                 <router-link to="/personal" class="no-underline">用户资料</router-link>
                             </el-link>
                         </el-menu-item>
+                        <el-menu-item index="6">
+                            <el-link v-if="username">
+                                <router-link to="/uploadThesis" class="no-underline">论文上传</router-link>
+                            </el-link>
+                        </el-menu-item>
                     </el-menu>
                 </el-col>
                 <el-col :span="6">
@@ -414,12 +419,57 @@
             this.fetchProfile()
         }
     }
+    const UploadPage = {
+        template: `
+          <div>
+            <el-upload
+                class="upload-demo"
+                action="/api/thesis/upload"
+                :on-success="handleSuccess"
+                :before-upload="beforeUpload">
+              <el-button type="primary" :loading="uploading">点击上传</el-button>
+            </el-upload>
+
+            <div v-html="previewContent"></div>
+          </div>
+        `,
+        data() {
+            return {
+                uploading: false,
+                previewContent: ''
+            };
+        },
+        methods: {
+            beforeUpload(file) {
+                this.uploading = true;
+                return true;
+            },
+            handleSuccess(response, file) {
+                this.uploading = false;
+                if (response && response.fileDownloadUri) {
+                    // Assuming the response contains the fileDownloadUri for preview
+                    this.loadPreview(response.fileDownloadUri);
+                }
+            },
+            loadPreview(fileDownloadUri) {
+                // Make a GET request to fetch the file content for preview
+                this.$axios.get(`/api/thesis/preview/${fileDownloadUri}`)
+                    .then(response => {
+                        this.previewContent = response.data;
+                    })
+                    .catch(error => {
+                        console.error('Error loading preview:', error);
+                    });
+            }
+        }
+    }
 
     const routes = [
         { path: '/', component: HomePage },
         { path: '/announcement', component: AnnouncementPage },
         { path: '/thesis-topic', component: ThesisTopicPage },
-        { path: '/personal', component: PersonalPage}
+        { path: '/personal', component: PersonalPage},
+        { path: '/uploadThesis', component: UploadPage}
     ]
 
     const app = Vue.createApp({
