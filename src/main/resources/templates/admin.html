@@ -1,10 +1,244 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <title>后台管理界面</title>-->
+<!--  &lt;!&ndash; Import style &ndash;&gt;-->
+<!--  <link rel="stylesheet" href="/css/default/element-plus.dist.index.css" />-->
+<!--</head>-->
+<!--<body>-->
+<!--<div id="app">-->
+<!--  <el-container class="layout-container-demo" style="height: 1500px">-->
+<!--    <el-aside width="200px">-->
+<!--      <el-scrollbar>-->
+<!--        <el-menu :default-openeds="['1', '3','4','4-1','4-2','5', '5-1', '5-2', '5-3', '5-4', '5-5', '5-6']">-->
+<!--          <el-menu-item index="1">-->
+<!--            <template #title>-->
+<!--              <el-icon><message></message></el-icon>-->
+<!--              <span style="font-size: larger; font-weight: bold;">后台首页</span>-->
+<!--            </template>-->
+<!--          </el-menu-item>-->
+<!--          <el-menu-item index="2">-->
+<!--            <el-icon><icon-menu></icon-menu></el-icon>轮播图-->
+<!--          </el-menu-item>-->
+<!--          <el-menu-item index="3">-->
+<!--            <el-icon><setting></setting></el-icon>公告信息管理-->
+<!--          </el-menu-item>-->
+<!--          <el-sub-menu index="4">-->
+<!--            <template #title>-->
+<!--            <el-icon><setting></setting></el-icon>用户管理-->
+<!--            </template>-->
+<!--            <el-menu-item index="4-1" @click="loadStudentManagement">学生管理</el-menu-item>-->
+<!--            <el-menu-item index="4-2" @click="loadTeacherManagement">教师管理</el-menu-item>-->
+<!--          </el-sub-menu>-->
+<!--          <el-sub-menu index="5">-->
+<!--            <template #title>-->
+<!--              <el-icon><setting></setting></el-icon>模块管理-->
+<!--            </template>-->
+<!--            <el-menu-item index="5-1" @click="loadThesisTitles" >论文题目</el-menu-item>-->
+<!--            <el-menu-item index="5-2">论文文档</el-menu-item>-->
+<!--            <el-menu-item index="5-3">论文指导</el-menu-item>-->
+<!--            <el-menu-item index="5-4">论文成绩</el-menu-item>-->
+<!--            <el-menu-item index="5-5">导师答疑</el-menu-item>-->
+<!--            <el-menu-item index="5-6">评审答辩</el-menu-item>-->
+<!--          </el-sub-menu>-->
+<!--        </el-menu>-->
+<!--      </el-scrollbar>-->
+<!--    </el-aside>-->
+<!--&lt;!&ndash;    <el-container th:replace="${content} :: content"></el-container>&ndash;&gt;-->
+<!--    <el-container>-->
+<!--      <el-main v-if="isFormVisible">-->
+<!--        <el-input v-model="searchInput" placeholder="请输入学生学号"></el-input>-->
+<!--        <el-button @click="searchStudentById">查询</el-button>-->
+<!--          <el-table :data="mainContent" style="width: 100%">-->
+<!--            <el-table-column prop="id" label="学号" width="180"></el-table-column>-->
+<!--            <el-table-column prop="name" label="姓名" width="180"></el-table-column>-->
+<!--            <el-table-column prop="class" label="班级" width="180"></el-table-column>-->
+<!--            <el-table-column prop="major" label="专业" width="180"></el-table-column>-->
+<!--            <el-table-column-->
+<!--                    label="操作"-->
+<!--                    width="120"-->
+<!--                    fixed="right">-->
+<!--              <template #default="scope">-->
+<!--                <el-button @click="editStudent(scope.row)" type="primary" size="small">详情</el-button>-->
+<!--                <el-dialog :visible.sync="isDialogVisible" title="编辑学生信息">-->
+<!--                  <el-form :model="editingStudent">-->
+<!--                    <el-form-item label="学号">-->
+<!--                      <el-input v-model="editingStudent.id" disabled></el-input>-->
+<!--                    </el-form-item>-->
+<!--                    <el-form-item label="姓名">-->
+<!--                      <el-input v-model="editingStudent.name"></el-input>-->
+<!--                    </el-form-item>-->
+<!--                    <el-form-item label="班级">-->
+<!--                      <el-input v-model="editingStudent.class"></el-input>-->
+<!--                    </el-form-item>-->
+<!--                    <el-form-item label="专业">-->
+<!--                      <el-input v-model="editingStudent.major"></el-input>-->
+<!--                    </el-form-item>-->
+<!--                  </el-form>-->
+<!--                  <span slot="footer" class="dialog-footer">-->
+<!--                    <el-button @click="isDialogVisible = false">取 消</el-button>-->
+<!--                    <el-button type="primary" @click="updateStudent">确 定</el-button>-->
+<!--                  </span>-->
+<!--                </el-dialog>-->
+<!--              </template>-->
+<!--            </el-table-column>-->
+<!--          </el-table>-->
+<!--      </el-main>-->
+<!--      <el-main v-if="isTeacherFormVisible">-->
+<!--        <el-input v-model="searchInput" placeholder="请输入教师工号"></el-input>-->
+<!--        <el-button @click="searchTeacherById">查询</el-button>-->
+<!--        <el-table :data="mainContent" style="width: 100%">-->
+<!--          <el-table-column prop="id" label="教师工号" width="180"></el-table-column>-->
+<!--          <el-table-column prop="name" label="教师名字" width="180"></el-table-column>-->
+<!--          <el-table-column prop="email" label="教师邮箱" width="180"></el-table-column>-->
+<!--          <el-table-column prop="phone" label="手机号" width="180"></el-table-column>-->
+<!--          <el-table-column-->
+<!--                  label="操作"-->
+<!--                  width="120"-->
+<!--                  fixed="right">-->
+<!--            <template #default="scope">-->
+<!--              <el-button @click="editTeacher(scope.row)" type="primary" size="small">详情</el-button>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--        </el-table>-->
+<!--      </el-main>-->
+<!--&lt;!&ndash;      <el-footer>Footer</el-footer>&ndash;&gt;-->
+<!--    </el-container>-->
+<!--  </el-container>-->
+<!--</div>-->
+<!--&lt;!&ndash; Import Vue 3 &ndash;&gt;-->
+<!--<script src=/js/vue.global.js></script>-->
+<!--&lt;!&ndash; Import component library &ndash;&gt;-->
+<!--<script src="/js/index.full.js"></script>-->
+<!--<script>-->
+<!--  const app = Vue.createApp({-->
+<!--    setup() {-->
+<!--      // //用于提交请求到后端，加载模板loadStudentManagement.html-->
+<!--      // const loadStudentManagement = async () => {-->
+<!--      //   const response = await fetch('/admin/loadStudentManagement')-->
+<!--      // }-->
+<!--      const mainContent = Vue.ref('')-->
+<!--      const editingStudent = Vue.ref(null)-->
+<!--      const isDialogVisible = Vue.ref(false)-->
+<!--      const editStudent = (row) => {-->
+<!--        editingStudent.value = { ...row }-->
+<!--        isDialogVisible.value = true-->
+<!--      }-->
+<!--      const isFormVisible = Vue.ref(false)-->
+<!--      const isTeacherFormVisible = Vue.ref(false)-->
+<!--      const searchInput = Vue.ref('')-->
+<!--      const loadStudentManagement = async () => {-->
+<!--        const response = await fetch('/admin/getStudents')-->
+<!--        const students = await response.json()-->
+<!--        mainContent.value = students.map(student => ({-->
+<!--          id: student.studentId,-->
+<!--          name: student.studentName,-->
+<!--          class: student.grade,-->
+<!--          major: student.major,-->
+<!--        }))-->
+<!--        isTeacherFormVisible.value = false-->
+<!--        isFormVisible.value = true // 在需要显示表单的时候，将 isFormVisible 的值设置为 true-->
+<!--      }-->
+<!--      const loadTeacherManagement = async () => {-->
+<!--        const response = await fetch('/admin/getTeachers')-->
+<!--        mainContent.value = await response.json()-->
+<!--        mainContent.value = mainContent.value.map(teacher => ({-->
+<!--          id: teacher.teacherId,-->
+<!--          name: teacher.teacherName,-->
+<!--          email: teacher.email,-->
+<!--          phone: teacher.phone,-->
+<!--        }))-->
+<!--        isFormVisible.value = false-->
+<!--        isTeacherFormVisible.value = true-->
+<!--      }-->
+<!--      const updateStudent = async () => {-->
+<!--        await fetch(`/admin/updateStudent`, {-->
+<!--          method: 'POST',-->
+<!--          headers: {-->
+<!--            'Content-Type': 'application/json',-->
+<!--          },-->
+<!--          body: JSON.stringify(editingStudent.value),-->
+<!--        })-->
+<!--        isDialogVisible.value = false-->
+<!--        // 重新加载学生数据-->
+<!--        await loadStudentManagement()-->
+<!--      }-->
+<!--      const searchStudentById = async () => {-->
+<!--        const response = await fetch(`/admin/searchStudentById?studentId=${searchInput.value}`)-->
+<!--        let students = await response.json()-->
+<!--        if (!Array.isArray(students)) {-->
+<!--          students = [students]-->
+<!--        }-->
+<!--        mainContent.value = students.map(student => ({-->
+<!--          id: student.studentId,-->
+<!--          name: student.studentName,-->
+<!--          class: student.grade,-->
+<!--          major: student.major,-->
+<!--        }))-->
+<!--        isTeacherFormVisible.value = false-->
+<!--        isFormVisible.value = true-->
+<!--      }-->
+<!--      const searchTeacherById = async () => {-->
+<!--        const response = await fetch(`/admin/searchTeacherById?teacherId=${searchInput.value}`)-->
+<!--        let teachers = await response.json()-->
+<!--        if (!Array.isArray(teachers)) {-->
+<!--          teachers = [teachers]-->
+<!--        }-->
+<!--        mainContent.value = teachers.map(teacher => ({-->
+<!--          id: teacher.teacherId,-->
+<!--          name: teacher.teacherName,-->
+<!--          email: teacher.email,-->
+<!--          phone: teacher.phone,-->
+<!--        }))-->
+<!--        isFormVisible.value = false-->
+<!--        isTeacherFormVisible.value = true-->
+<!--      }-->
+<!--      const loadThesisTitles = async () => {-->
+<!--        const response = await fetch('/admin/getThesisTitles')-->
+<!--        mainContent.value = await response.json()-->
+
+<!--        isFormVisible.value = false-->
+<!--        isTeacherFormVisible.value = false-->
+<!--      }-->
+<!--      return {-->
+<!--        mainContent,-->
+<!--        loadStudentManagement,-->
+<!--        loadTeacherManagement,-->
+<!--        editingStudent,-->
+<!--        isDialogVisible,-->
+<!--        editStudent,-->
+<!--        updateStudent,-->
+<!--        searchInput,-->
+<!--        searchStudentById,-->
+<!--        isFormVisible,-->
+<!--        isTeacherFormVisible,-->
+<!--        searchTeacherById,-->
+<!--        loadThesisTitles-->
+<!--      }-->
+<!--    }-->
+<!--  })-->
+<!--  app.use(ElementPlus)-->
+<!--  app.mount('#app')-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>后台管理界面</title>
-  <!-- Import style -->
   <link rel="stylesheet" href="/css/default/element-plus.dist.index.css" />
+  <script src="/js/vue.global.js"></script>
+  <script src="/js/index.full.js"></script>
+  <script src="/js/vue-router.global.js"></script>
+  <script src="/js/httpVueLoader.js"></script>
+  <style>
+    .no-underline {
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
 <div id="app">
@@ -28,14 +262,20 @@
             <template #title>
             <el-icon><setting></setting></el-icon>用户管理
             </template>
-            <el-menu-item index="4-1" @click="loadStudentManagement">学生管理</el-menu-item>
-            <el-menu-item index="4-2" @click="loadTeacherManagement">教师管理</el-menu-item>
+            <el-menu-item index="4-1">
+              <router-link to="/admin/loadStudentManagement" class="no-underline">学生管理</router-link>
+            </el-menu-item>
+            <el-menu-item index="4-2">
+                <router-link to="/admin/loadTeacherManagement" class="no-underline">教师管理</router-link>
+            </el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="5">
             <template #title>
               <el-icon><setting></setting></el-icon>模块管理
             </template>
-            <el-menu-item index="5-1" @click="loadThesisTitles" >论文题目</el-menu-item>
+            <el-menu-item index="5-1">
+                <router-link to="/admin/loadThesisTitles" class="no-underline">论文题目</router-link>
+            </el-menu-item>
             <el-menu-item index="5-2">论文文档</el-menu-item>
             <el-menu-item index="5-3">论文指导</el-menu-item>
             <el-menu-item index="5-4">论文成绩</el-menu-item>
@@ -45,80 +285,17 @@
         </el-menu>
       </el-scrollbar>
     </el-aside>
-<!--    <el-container th:replace="${content} :: content"></el-container>-->
     <el-container>
-      <el-main v-if="isFormVisible">
-  <!--      {{ mainContent }}-->
-        <el-input v-model="searchInput" placeholder="请输入学生学号"></el-input>
-        <el-button @click="searchStudentById">查询</el-button>
-          <el-table :data="mainContent" style="width: 100%">
-            <el-table-column prop="id" label="学号" width="180"></el-table-column>
-            <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-            <el-table-column prop="class" label="班级" width="180"></el-table-column>
-            <el-table-column prop="major" label="专业" width="180"></el-table-column>
-            <el-table-column
-                    label="操作"
-                    width="120"
-                    fixed="right">
-              <template #default="scope">
-                <el-button @click="editStudent(scope.row)" type="primary" size="small">详情</el-button>
-                <el-dialog :visible.sync="isDialogVisible" title="编辑学生信息">
-                  <el-form :model="editingStudent">
-                    <el-form-item label="学号">
-                      <el-input v-model="editingStudent.id" disabled></el-input>
-                    </el-form-item>
-                    <el-form-item label="姓名">
-                      <el-input v-model="editingStudent.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="班级">
-                      <el-input v-model="editingStudent.class"></el-input>
-                    </el-form-item>
-                    <el-form-item label="专业">
-                      <el-input v-model="editingStudent.major"></el-input>
-                    </el-form-item>
-                  </el-form>
-                  <span slot="footer" class="dialog-footer">
-                    <el-button @click="isDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="updateStudent">确 定</el-button>
-                  </span>
-                </el-dialog>
-              </template>
-            </el-table-column>
-          </el-table>
+      <el-main>
+        <router-view></router-view>
       </el-main>
-      <el-main v-if="isTeacherFormVisible">
-        <el-input v-model="searchInput" placeholder="请输入教师工号"></el-input>
-        <el-button @click="searchTeacherById">查询</el-button>
-        <el-table :data="mainContent" style="width: 100%">
-          <el-table-column prop="id" label="教师工号" width="180"></el-table-column>
-          <el-table-column prop="name" label="教师名字" width="180"></el-table-column>
-          <el-table-column prop="email" label="教师邮箱" width="180"></el-table-column>
-          <el-table-column prop="phone" label="手机号" width="180"></el-table-column>
-          <el-table-column
-                  label="操作"
-                  width="120"
-                  fixed="right">
-            <template #default="scope">
-              <el-button @click="editTeacher(scope.row)" type="primary" size="small">详情</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-main>
-<!--      <el-footer>Footer</el-footer>-->
     </el-container>
   </el-container>
 </div>
-<!-- Import Vue 3 -->
-<script src=/js/vue.global.js></script>
-<!-- Import component library -->
-<script src="/js/index.full.js"></script>
+<script src="/js/axios.min.js"></script>
 <script>
-  const app = Vue.createApp({
-    setup() {
-      // //用于提交请求到后端，加载模板loadStudentManagement.html
-      // const loadStudentManagement = async () => {
-      //   const response = await fetch('/admin/loadStudentManagement')
-      // }
+  const loadStudentManagementPage = {
+    setup(){
       const mainContent = Vue.ref('')
       const editingStudent = Vue.ref(null)
       const isDialogVisible = Vue.ref(false)
@@ -126,32 +303,20 @@
         editingStudent.value = { ...row }
         isDialogVisible.value = true
       }
-      const isFormVisible = Vue.ref(false)
-      const isTeacherFormVisible = Vue.ref(false)
       const searchInput = Vue.ref('')
-      const loadStudentManagement = async () => {
-        const response = await fetch('/admin/getStudents')
-        const students = await response.json()
+      const searchStudentById = async () => {
+        const url = searchInput.value ? `/admin/searchStudentById?studentId=${searchInput.value}` : '/admin/getStudents';
+        const response = await fetch(url)
+        let students = await response.json()
+        if (!Array.isArray(students)) {
+          students = [students]
+        }
         mainContent.value = students.map(student => ({
           id: student.studentId,
           name: student.studentName,
           class: student.grade,
           major: student.major,
         }))
-        isTeacherFormVisible.value = false
-        isFormVisible.value = true // 在需要显示表单的时候，将 isFormVisible 的值设置为 true
-      }
-      const loadTeacherManagement = async () => {
-        const response = await fetch('/admin/getTeachers')
-        mainContent.value = await response.json()
-        mainContent.value = mainContent.value.map(teacher => ({
-          id: teacher.teacherId,
-          name: teacher.teacherName,
-          email: teacher.email,
-          phone: teacher.phone,
-        }))
-        isFormVisible.value = false
-        isTeacherFormVisible.value = true
       }
       const updateStudent = async () => {
         await fetch(`/admin/updateStudent`, {
@@ -163,62 +328,76 @@
         })
         isDialogVisible.value = false
         // 重新加载学生数据
-        await loadStudentManagement()
+        await searchStudentById()
       }
-      const searchStudentById = async () => {
-        const response = await fetch(`/admin/searchStudentById?studentId=${searchInput.value}`)
-        let students = await response.json()
-        if (!Array.isArray(students)) {
-          students = [students]
-        }
-        mainContent.value = students.map(student => ({
-          id: student.studentId,
-          name: student.studentName,
-          class: student.grade,
-          major: student.major,
-        }))
-        isTeacherFormVisible.value = false
-        isFormVisible.value = true
-      }
-      const searchTeacherById = async () => {
-        const response = await fetch(`/admin/searchTeacherById?teacherId=${searchInput.value}`)
-        let teachers = await response.json()
-        if (!Array.isArray(teachers)) {
-          teachers = [teachers]
-        }
-        mainContent.value = teachers.map(teacher => ({
-          id: teacher.teacherId,
-          name: teacher.teacherName,
-          email: teacher.email,
-          phone: teacher.phone,
-        }))
-        isFormVisible.value = false
-        isTeacherFormVisible.value = true
-      }
-      const loadThesisTitles = async () => {
-        const response = await fetch('/admin/getThesisTitles')
-        mainContent.value = await response.json()
-
-        isFormVisible.value = false
-        isTeacherFormVisible.value = false
-      }
+      // 默认加载所有学生
+      searchStudentById();
       return {
         mainContent,
-        loadStudentManagement,
-        loadTeacherManagement,
         editingStudent,
         isDialogVisible,
         editStudent,
-        updateStudent,
         searchInput,
         searchStudentById,
-        isFormVisible,
-        isTeacherFormVisible,
-        searchTeacherById,
-        loadThesisTitles
+        updateStudent,
       }
-    }
+    },
+    template: `
+      <div>
+        <el-input v-model="searchInput" placeholder="请输入学生学号"></el-input>
+        <el-button @click="searchStudentById">查询</el-button>
+        <el-table :data="mainContent" style="width: 100%">
+          <el-table-column prop="id" label="学号" width="180"></el-table-column>
+          <el-table-column prop="name" label="姓名" width="180"></el-table-column>
+          <el-table-column prop="class" label="班级" width="180"></el-table-column>
+          <el-table-column prop="major" label="专业" width="180"></el-table-column>
+          <el-table-column
+                  label="操作"
+                  width="120"
+                  fixed="right">
+            <template #default="scope">
+              <el-button @click="editStudent(scope.row)" type="primary" size="small">详情</el-button>
+              <el-dialog :visible.sync="isDialogVisible" title="编辑学生信息">
+                <el-form :model="editingStudent">
+                  <el-form-item label="学号">
+                    <el-input v-model="editingStudent.id" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="姓名">
+                    <el-input v-model="editingStudent.name"></el-input>
+                  </el-form-item>
+                  <el-form-item label="班级">
+                    <el-input v-model="editingStudent.class"></el-input>
+                  </el-form-item>
+                  <el-form-item label="专业">
+                    <el-input v-model="editingStudent.major"></el-input>
+                  </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                  <el-button @click="isDialogVisible = false">取 消</el-button>
+                  <el-button type="primary" @click="updateStudent">确 定</el-button>
+                </span>
+              </el-dialog>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    `,
+  }
+  const loadTeacherManagementPage = { template: '<h1>教师管理</h1>' }
+  const loadThesisTitlesPage = { template: '<h1>论文题目</h1>' }
+  const routes = [
+    { path: '/admin/loadStudentManagement', component: loadStudentManagementPage },
+    { path: '/admin/loadTeacherManagement', component: loadTeacherManagementPage },
+    { path: '/admin/loadThesisTitles', component: loadThesisTitlesPage },
+  ]
+  const router = VueRouter.createRouter({
+    history: VueRouter.createWebHashHistory(),
+    routes,
   })
+  const app = Vue.createApp({
+
+  })
+  app.use(router)
   app.use(ElementPlus)
   app.mount('#app')
 </script>
