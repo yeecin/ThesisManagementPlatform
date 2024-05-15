@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>教师首页</title>
@@ -7,6 +7,7 @@
     <script src="/js/vue.global.js"></script>
     <script src="/js/index.full.js"></script>
     <script src="/js/vue-router.global.js"></script>
+    <script src="/js/httpVueLoader.js"></script>
     <style>
         .no-underline {
             text-decoration: none;
@@ -147,7 +148,6 @@
         { path: '/', component: HomePage },
         { path: '/announcement', component: AnnouncementPage },
         { path: '/studentThesis', component: StudentThesisPage },
-        { path: '/personal', component: PersonalPage}
     ]
 
     const app = Vue.createApp({
