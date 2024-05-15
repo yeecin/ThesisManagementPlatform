@@ -206,8 +206,16 @@
     `,
         data() {
             return {
-                images: [],
-                announcements: []
+                images: [
+                    { id: 1, url: 'https://www.gdpu.edu.cn/tp/2023ztjy.jpg' },
+                    { id: 2, url: 'https://www.gdpu.edu.cn/tp/yaoyixietong.jpg' },
+                    { id: 3, url: 'https://www.gdpu.edu.cn/tp/xishuihu.jpg' }
+                ],
+                announcements: [
+                    { id: 1, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：' },
+                    { id: 2, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：' },
+                    { id: 3, title: '关于2021年毕业设计（论文）工作的通知', content: '根据学校有关文件精神，现将2021年毕业设计（论文）工作安排如下：' }
+                ]
             }
         },
         created() {
