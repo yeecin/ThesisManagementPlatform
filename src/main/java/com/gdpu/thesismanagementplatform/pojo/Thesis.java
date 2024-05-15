@@ -23,5 +23,4 @@ public class Thesis {
 
     private String content;
 
-    private String status;
 }

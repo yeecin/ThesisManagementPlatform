@@ -86,6 +86,16 @@ public class UserController {
     public String teacherRegister() {
         return "/Teacher/Register";
     }
+
+    @RequestMapping("/User/ResetPassword")
+    public String studentResetPassword() {
+        return "/User/ResetPasswords";
+    }
+    @RequestMapping("/Teacher/ResetPassword")
+    public String teacherResetPassword() {
+        return "/Teacher/ResetPasswords";
+    }
+
     @RequestMapping("/Teacher/index")
     public String teacherIndex() {
         return "/Teacher/index";
@@ -127,7 +137,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/User/ResetPassword", method = RequestMethod.POST)
+    @RequestMapping("/User/ResetPasswordCheck")
     public void resetStudentPassword(@RequestBody Student student, HttpServletResponse response, HttpSession session) throws IOException {
         // 设置响应的字符集为UTF-8
         response.setCharacterEncoding("UTF-8");
@@ -147,7 +157,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/Teacher/ResetPassword", method = RequestMethod.POST)
+    @RequestMapping("/Teacher/ResetPasswordCheck")
     public void resetTeacherPassword(@RequestBody Teacher teacher, HttpServletResponse response, HttpSession session) throws IOException {
         // 设置响应的字符集为UTF-8
         response.setCharacterEncoding("UTF-8");

@@ -37,4 +37,5 @@ public class ThesisChoice {
         SELECTED,
         COMPLETED
     }
+
 }
