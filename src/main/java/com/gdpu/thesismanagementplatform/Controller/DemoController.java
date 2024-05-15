@@ -10,13 +10,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 @Controller
@@ -52,7 +53,21 @@ public class DemoController {
     public String resetPasswords() {
         return "User/ResetPasswords";
     }
+    @PostMapping("/upload")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
+        // 指定保存文件的路径
+        Path path = Paths.get("uploads/" + file.getOriginalFilename());
 
+        // 将文件保存到文件系统中
+        try {
+            Files.write(path, file.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "upload failure";
+        }
+
+        return "upload success";
+    }
     @RequestMapping("/admin")
     public String admin() {
         return "admin";

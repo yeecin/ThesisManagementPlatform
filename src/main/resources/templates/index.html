@@ -157,6 +157,11 @@
                                 <router-link to="/personal" class="no-underline">用户资料</router-link>
                             </el-link>
                         </el-menu-item>
+                        <el-menu-item index="6">
+                            <el-link v-if="username">
+                                <router-link to="/uploadThesis" class="no-underline">论文上传</router-link>
+                            </el-link>
+                        </el-menu-item>
                     </el-menu>
                 </el-col>
                 <el-col :span="6">
@@ -414,12 +419,69 @@
             this.fetchProfile()
         }
     }
+    const UploadPage = {
+        template: `
+          <el-upload
+              v-model:file-list="fileList"
+              class="upload-demo"
+              multiple
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :before-remove="beforeRemove"
+              :before-upload="beforeUpload"
+              :limit="3"
+              :on-exceed="handleExceed"
+          >
+            <el-button type="primary">点击上传论文</el-button>
+          </el-upload>
+        `,
+        data() {
+            return {
+                fileList: [
+                ]
+            }
+        },
+        methods: {
+            handleRemove(file, uploadFiles) {
+                console.log(file, uploadFiles)
+            },
+            handlePreview(uploadFile) {
+                console.log(uploadFile)
+            },
+            handleExceed(files, uploadFiles) {
+                this.$message.warning(
+                    `The limit is 3, you selected ${files.length} files this time, add up to ${
+                        files.length + uploadFiles.length
+                    } totally`
+                )
+            },
+            beforeRemove(uploadFile, uploadFiles) {
+                return this.$confirm(
+                    `Cancel the transfer of ${uploadFile.name} ?`
+                ).then(
+                    () => true,
+                    () => false
+                )
+            },
+            beforeUpload(file) {
+                const isDoc = file.type === 'application/msword';
+                const isDocx = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                const isPdf = file.type === 'application/pdf';
+                if (!isDoc && !isDocx && !isPdf) {
+                    this.$message.error('上传论文只能是 doc/docx/pdf 格式!');
+                    return false;
+                }
+                return true;
+            }
+        }
+    }
 
     const routes = [
         { path: '/', component: HomePage },
         { path: '/announcement', component: AnnouncementPage },
         { path: '/thesis-topic', component: ThesisTopicPage },
-        { path: '/personal', component: PersonalPage}
+        { path: '/personal', component: PersonalPage},
+        { path: '/uploadThesis', component: UploadPage}
     ]
 
     const app = Vue.createApp({
