@@ -1,11 +1,11 @@
 package com.gdpu.thesismanagementplatform.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.gdpu.thesismanagementplatform.pojo.Thesis;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ThesisRepository extends JpaRepository<Thesis, Long> {
-    List<Thesis> findByTitleContaining(String keyword);
-    Optional<Thesis> findByUrl(String url);
+import java.util.List;
+
+public interface ThesisRepository extends JpaRepository<Thesis, Integer> {
+
+    List<Thesis> findAllByTeacherId(int teacherId);
 }

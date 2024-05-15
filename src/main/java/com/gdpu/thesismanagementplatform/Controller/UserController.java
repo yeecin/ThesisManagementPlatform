@@ -44,6 +44,7 @@ public class UserController {
             if(teacher != null){
                 System.out.println("teacher:"+teacher);
                 session.setAttribute("username", user.getUsername());
+                session.setAttribute("teacherId", teacher.getTeacherId());
                 response.getWriter().write("success");
                 response.setHeader("location", "/Teacher/index");
             }else{
@@ -133,7 +134,7 @@ public class UserController {
             response.getWriter().write("注册成功");
             //把教师信息存入session
             session.setAttribute("username", teacher.getTeacherName());
-            response.setHeader("location", "/");
+            response.setHeader("location", "/Teacher/index");
         }
     }
 
@@ -213,4 +214,19 @@ public class UserController {
         // 如果找不到用户，返回null
         return null;
     }
+
+    @RequestMapping(value = "/Teacher/GetProfile", method = RequestMethod.GET)
+    @ResponseBody
+    public Teacher getTeacherProfile(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+
+        // 根据用户名查找用户
+        Teacher teacher = teacherRepository.findByTeacherName(username);
+        if (teacher != null) {
+            return teacher;
+        }
+        // 如果找不到用户，返回null
+        return null;
+    }
+
 }
