@@ -31,11 +31,11 @@ public class ThesisChoice {
 
     @Column
     private String thesisFilePath;
-
+    //论文状态
     public enum ChoiceStatus {
-        SUBMITTING,
-        SELECTED,
-        COMPLETED
+        审查中,
+        选择中,
+        已完成,
     }
 
 }
