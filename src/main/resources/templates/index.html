@@ -186,7 +186,41 @@
 </div>
 <script src="/js/axios.min.js"></script>
 <script>
-    const HomePage = { template: '<div>这是首页</div>' }
+    const HomePage = {
+        template: `
+        <div>
+          <el-carousel height="300px">
+            <el-carousel-item v-for="image in images" :key="image.id">
+              <img :src="image.url" :alt="'Image ' + image.id">
+            </el-carousel-item>
+          </el-carousel>
+            <el-divider></el-divider>
+            <h2>公告信息</h2>
+            <el-card class="box-card" v-for="announcement in announcements" :key="announcement.id">
+                <div slot="header" class="clearfix">
+                    <span>{{ announcement.title }}</span>
+                </div>
+                <div>{{ announcement.content }}</div>
+            </el-card>
+        </div>
+    `,
+        data() {
+            return {
+                images: [],
+                announcements: []
+            }
+        },
+        created() {
+            axios.get('/getImages')
+                .then(response => {
+                    this.images = response.data
+                })
+            axios.get('/getAnnouncements')
+                .then(response => {
+                    this.announcements = response.data
+                })
+        }
+    }
     const AnnouncementPage = { template: '<div>这是公告信息页面</div>' }
     const ThesisTopicPage = { template: '<div>这是论文题目页面</div>' }
     const PersonalPage = {
