@@ -100,9 +100,10 @@
         template: `
         <div class="centered-content">
             <el-table :data="thesisList" style="width: 100%">
-                <el-table-column prop="studentName" label="学生姓名"></el-table-column>
-                <el-table-column prop="thesisTitle" label="论文题目"></el-table-column>
-                <el-table-column prop="thesisAbstract" label="论文摘要"></el-table-column>
+                <el-table-column prop="teacher.teacherId" label="教师编号"></el-table-column>
+                <el-table-column prop="student.studentId" label="学生学号"></el-table-column>
+                <el-table-column prop="thesisId" label="论文编号"></el-table-column>
+                <el-table-column prop="title" label="论文题目"></el-table-column>
                 <el-table-column
                     label="操作"
                     width="120">
@@ -120,14 +121,12 @@
         },
         methods: {
             reviewThesis(thesis) {
-                // 这里你需要实现审核论文的逻辑
+                // 这里实现审核论文的逻辑
             },
             fetchThesisList() {
                 // 发送GET请求到后端的/api/thesis/list接口
-                axios.get('/api/thesis/list', {
-                    params: {
-                        teacherId: 1 // 这里应该是当前登录的教师的ID
-                    }
+                axios.get('/api/thesis/getThesis', {
+                    // params: 1
                 })
                     .then(response => {
                         // 将返回的数据赋值给thesisList

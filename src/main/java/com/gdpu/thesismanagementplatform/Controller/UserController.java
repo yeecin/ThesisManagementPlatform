@@ -44,6 +44,7 @@ public class UserController {
             if(teacher != null){
                 System.out.println("teacher:"+teacher);
                 session.setAttribute("username", user.getUsername());
+                session.setAttribute("teacherId", teacher.getTeacherId());
                 response.getWriter().write("success");
                 response.setHeader("location", "/Teacher/index");
             }else{
