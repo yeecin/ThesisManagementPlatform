@@ -139,25 +139,22 @@
             <el-row>
                 <el-col :span="18">
                     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                        <el-menu-item index="1"  type="primary" underline>
+                        <el-menu-item index="1">
                             <router-link to="/" class="no-underline">首页</router-link>
                         </el-menu-item>
-                        <el-menu-item index="2" type="primary" underline>
+                        <el-menu-item index="2">
                             <router-link to="/announcement" class="no-underline">公告信息</router-link>
                         </el-menu-item>
                         <el-menu-item index="3">
-                            <router-link to="/thesis-topic">论文题目</router-link>
+                            <router-link to="/thesis-topic" class="no-underline">论文题目</router-link>
                         </el-menu-item>
-                        <el-menu-item index="4">
-                            <el-link v-if="!username" href="./login" type="primary" underline>登录</el-link>
-                            <span v-else>当前用户：{{ username }}</span>
+                        <el-menu-item index="4" type="primary">
+                            <el-link v-if="!username" href="./login">登录</el-link>
+                            <el-link v-else href="./login">当前用户：{{ username }}</el-link>
                         </el-menu-item>
                         <el-menu-item index="5">
-                            <el-link v-if="!username" href="./User/Register" type="primary" underline>注册</el-link>
-                        </el-menu-item>
-                        <el-menu-item index="6">
-                            <el-link v-if="username" type="primary" underline>
-                                <router-link to="/personal">用户资料</router-link>
+                            <el-link v-if="username">
+                                <router-link to="/personal" class="no-underline">用户资料</router-link>
                             </el-link>
                         </el-menu-item>
                     </el-menu>
@@ -234,8 +231,8 @@
     const PersonalPage = {
         template: `
           <div>
-            <h1>个人资料</h1>
-            <p>在这里，你可以编辑你的个人资料并保存。</p>
+            <h1 style="text-align: center;">个人资料</h1>
+            <p style="text-align: center;">在这里，你可以编辑你的个人资料并保存。</p>
             <el-form ref="form" :model="form" label-width="120px" class="centered-form">
               <el-form-item label="姓名">
                 <el-input v-model="form.studentName"></el-input>
