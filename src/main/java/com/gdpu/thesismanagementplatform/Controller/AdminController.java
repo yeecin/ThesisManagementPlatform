@@ -11,10 +11,7 @@ import com.gdpu.thesismanagementplatform.repository.ThesisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -66,5 +63,15 @@ public class AdminController {
     @PostMapping("/postAnnouncement")
     public Announcement postAnnouncement(@RequestBody Announcement announcement) {
         return announcementRepository.save(announcement);
+    }
+    @PostMapping("getCurrentAnnouncement")
+    @ResponseBody
+    public Announcement getCurrentAnnouncement() {
+        return announcementRepository.findTopByOrderByIdDesc();
+    }
+    @GetMapping("/getAnnouncements")
+    @ResponseBody
+    public List<Announcement> getAnnouncements() {
+        return announcementRepository.findAll();
     }
 }

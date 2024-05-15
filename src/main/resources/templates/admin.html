@@ -480,26 +480,50 @@
         title: '',
         content: ''
       })
+      const announcements = Vue.ref([])
+
+      const fetchAnnouncements = async () => {
+        const response = await fetch('/admin/getAnnouncements')
+        announcements.value = await response.json()
+      }
+
+      const selectAnnouncement = (announcement) => {
+        form.value.title = announcement.title
+        form.value.content = announcement.content
+      }
 
       const submitAnnouncement = async () => {
-        await fetch('/admin/postAnnouncement', {
-          method: 'POST',
+        await fetch('/admin/updateAnnouncement', {
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(form.value),
         })
-        form.value.title = ''
-        form.value.content = ''
+        // After updating the announcement, fetch the list again
+        await fetchAnnouncements()
       }
+
+      // Fetch the list of announcements when the component is created
+      fetchAnnouncements()
 
       return {
         form,
+        announcements,
+        selectAnnouncement,
         submitAnnouncement,
       }
     },
     template: `
       <div>
+        <el-row v-for="announcement in announcements" @click="selectAnnouncement(announcement)" :key="announcement.id">
+          <el-col :span="24">
+            <el-card>
+              <h2>{{ announcement.title }}</h2>
+              <p>{{ announcement.content }}</p>
+            </el-card>
+          </el-col>
+        </el-row>
         <el-form :model="form" label-width="120px">
           <el-form-item label="公告标题">
             <el-input v-model="form.title"></el-input>
