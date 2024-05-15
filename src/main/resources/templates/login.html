@@ -142,7 +142,12 @@
             password: password,
             role: selectedRoleId
         }).then(function (response) {
-            window.location.href = response.headers.location;
+            if (response.data == 'fail') {
+                alert('用户名或密码错误');
+                return;
+            }else if(response.data == 'success'){
+                window.location.href = response.headers.location;
+            }
             console.log(response);
         }).catch(function (error) {
             console.log(error);
